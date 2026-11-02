@@ -32,9 +32,11 @@ Escopo V1: visão da organização (execuções de agentes, tarefas por status, 
 de IA no período, alertas abertos, últimas atividades), filtros por período e agente.
 Regra: todo indicador tem consulta rastreável; números de demonstração aparecem rotulados.
 
-Status (F1.3): **Em construção** — shell responsivo, linha de operação de 24 h com o horário real,
-painéis "Aguardando você" e "Agentes" em estado vazio, e "Estado da plataforma" com o status real de
-cada capacidade. As demais telas explicam o que farão e em que fase chegam. Nenhum dado fictício.
+Status (F1.3b): **Demonstração rotulada** — layout final do Painel (indicadores, execuções dos agentes,
+tarefas do mês, "Aguardando você", assistente, linha de operação, atividade) alimentado por dados de
+demonstração de um único arquivo, com o selo "Demonstração" em cada cartão e aviso no topo. Reais:
+saudação com o nome do usuário, data, estado da plataforma e progresso de construção. Cada cartão passa
+a dado real quando o módulo correspondente entrar (Fase 2+).
 
 ### AI Agent Manager — Fase 2
 

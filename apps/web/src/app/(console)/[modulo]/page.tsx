@@ -43,7 +43,7 @@ export default async function ModulePage({ params }: ModulePageProps) {
         <p className="mt-2 text-sm text-graphite-500">{ptBR.shell.phaseLong(info.phase)}</p>
       </header>
 
-      <section aria-labelledby="upcoming-title" className="mt-10 rounded-panel border border-graphite-800 bg-graphite-900 p-5 sm:p-6">
+      <section aria-labelledby="upcoming-title" className="surface-card mt-10 p-5 sm:p-6">
         <h2 id="upcoming-title" className="text-base font-medium text-mist-50">
           {ptBR.modulePage.upcomingTitle}
         </h2>

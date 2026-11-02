@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import { Wordmark } from '@magnus/ui';
 import { ptBR } from '@/content/pt-BR';
+import { BuildProgress } from './build-progress';
 import { NavList } from './nav-list';
 
-/** Persistent navigation rail: icons only on tablets, full labels on desktop. */
+/** Persistent navigation: icon rail on tablets, full sidebar on desktop. */
 export function Sidebar() {
   return (
     <aside className="sticky top-0 hidden h-dvh flex-col border-r border-graphite-800 bg-onyx md:flex">
-      <div className="flex h-16 items-center px-5 lg:px-6">
-        <Link href="/painel" className="rounded-sm">
+      <div className="flex h-18 items-center justify-center px-5 lg:justify-start lg:px-6">
+        <Link href="/painel" className="rounded-md">
           <span className="lg:hidden">
-            <Wordmark compact />
+            <Wordmark compact size={34} />
           </span>
           <span className="hidden lg:inline">
             <Wordmark />
@@ -27,8 +28,8 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <div className="hidden border-t border-graphite-800 px-6 py-4 text-sm text-graphite-500 lg:block">
-        {ptBR.shell.noOrganization}
+      <div className="hidden p-4 lg:block">
+        <BuildProgress />
       </div>
     </aside>
   );

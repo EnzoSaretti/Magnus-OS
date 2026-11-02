@@ -3,6 +3,31 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-02 · Fase 1.3b — Redesenho do console e logotipo
+
+**Entregue**
+
+- Logotipo oficial salvo em `docs/brand/` e redesenhado em SVG (`LogoMark`, `Wordmark`, ícone do app);
+  cores extraídas do arquivo original. D-13 concluída.
+- Tokens alinhados ao logo (brasa = vermelho do logo, cores `brand-*`), paleta de gráficos `chart-1..3`
+  validada para o fundo escuro, cartão `surface-card` com raio de 20 px.
+- Shell inspirado nas referências: barra lateral com grupos, selos de fase e cartão de progresso real;
+  topo com organização e menu da conta (avatar com iniciais, nome do perfil, Sair).
+- Painel: saudação com nome e data, 4 indicadores, execuções dos agentes (linha, 7/30 dias, dica ao
+  passar o mouse e teclado), tarefas do mês (rosca), "Aguardando você" com ações sensíveis e botão
+  Revisar, cartão do assistente (desabilitado até a Fase 2), linha de operação com marcas, atividade
+  dos agentes e estado da plataforma.
+- Dados de demonstração em um único arquivo (`content/demo/dashboard.ts`), com selo em cada cartão e
+  aviso no topo do Painel.
+- Gráficos em SVG próprio (sem dependência nova); `docs/11-design-system.md` reescrito.
+
+**Verificado**
+
+- Typecheck, 76 testes (4 novos da matemática dos gráficos) e build.
+- Paleta dos gráficos aprovada pelo validador (luminosidade, croma, daltonismo, contraste).
+
+**Teste do fundador (F1.4a):** cadastro, confirmação e login funcionando com a conta real.
+
 ## 2026-11-02 · Fase 1.4a — Login
 
 **Entregue**

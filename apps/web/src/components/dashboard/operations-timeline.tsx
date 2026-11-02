@@ -1,18 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { demoTodayEvents } from '@/content/demo/dashboard';
 import { ptBR } from '@/content/pt-BR';
+import { Panel } from './panel';
 
 const HOURS = Array.from({ length: 25 }, (_, hour) => hour);
 const MINUTES_PER_DAY = 24 * 60;
 const timeFormat = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
 /**
- * Today's operations on a 24-hour scale. The "now" cursor is the browser's
- * real clock; agent activity marks will be plotted here from phase 2. Rendered
+ * Today's operations on a 24-hour scale. The "now" cursor is the browser's real
+ * clock; marks up to now come from demonstration data until phase 2. Rendered
  * after mount only, so server and client markup never disagree about the time.
  */
-export function OperationsTimeline() {
+export function OperationsTimeline({ className }: { className?: string }) {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -22,21 +24,26 @@ export function OperationsTimeline() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const elapsed = now ? ((now.getHours() * 60 + now.getMinutes()) / MINUTES_PER_DAY) * 100 : 0;
   const t = ptBR.dashboard.timeline;
+  const nowMinute = now ? now.getHours() * 60 + now.getMinutes() : 0;
+  const elapsed = (nowMinute / MINUTES_PER_DAY) * 100;
+  const events = now ? demoTodayEvents.filter((event) => event.minute <= nowMinute) : [];
+  const runs = events.filter((event) => event.kind === 'run').length;
+  const approvals = events.length - runs;
 
   return (
-    <section aria-labelledby="timeline-title" className="rounded-panel border border-graphite-800 bg-graphite-900 p-5 sm:p-6">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 id="timeline-title" className="text-base font-medium text-mist-50">
-          {t.title}
-        </h2>
+    <Panel
+      id="linha-de-operacao"
+      title={t.title}
+      demo
+      className={className}
+      actions={
         <p className="text-sm tabular-nums text-magnus-300" aria-live="off">
           {now ? `${t.now} ${timeFormat.format(now)}` : ' '}
         </p>
-      </div>
-
-      <div className="relative mt-5 h-20 overflow-hidden rounded-control bg-onyx" aria-hidden="true">
+      }
+    >
+      <div className="relative h-24 overflow-hidden rounded-control bg-onyx" aria-hidden="true">
         <div
           className="absolute inset-y-0 left-0 bg-linear-to-r from-magnus-950/70 via-magnus-950 to-magnus-700/35 transition-[width] duration-1000 ease-out-quint"
           style={{ width: `${elapsed}%` }}
@@ -49,6 +56,16 @@ export function OperationsTimeline() {
               hour % 6 === 0 ? 'h-full bg-graphite-700' : hour % 3 === 0 ? 'h-1/2 bg-graphite-700' : 'h-1/4 bg-graphite-800',
             ].join(' ')}
             style={{ left: `${(hour / 24) * 100}%` }}
+          />
+        ))}
+        {events.map((event) => (
+          <span
+            key={`${event.kind}-${event.minute}`}
+            className={[
+              'absolute size-2.5 -translate-x-1/2 rounded-full ring-2 ring-onyx',
+              event.kind === 'run' ? 'top-[38%] bg-chart-1' : 'top-[18%] bg-chart-3',
+            ].join(' ')}
+            style={{ left: `${(event.minute / MINUTES_PER_DAY) * 100}%` }}
           />
         ))}
         {now && (
@@ -73,7 +90,18 @@ export function OperationsTimeline() {
         ))}
       </div>
 
-      <p className="mt-5 text-sm text-mist-300">{t.empty}</p>
-    </section>
+      <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-mist-300">
+        <li className="flex items-center gap-2">
+          <span aria-hidden="true" className="size-2.5 rounded-full bg-chart-1" />
+          {t.runs}
+          <span className="tabular-nums text-mist-50">{runs}</span>
+        </li>
+        <li className="flex items-center gap-2">
+          <span aria-hidden="true" className="size-2.5 rounded-full bg-chart-3" />
+          {t.approvals}
+          <span className="tabular-nums text-mist-50">{approvals}</span>
+        </li>
+      </ul>
+    </Panel>
   );
 }

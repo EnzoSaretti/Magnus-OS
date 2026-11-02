@@ -1,11 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="magnus-bar" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff5b2e" />
-      <stop offset="1" stop-color="#7352ff" />
+    <clipPath id="c"><rect width="64" height="64" rx="18" /></clipPath>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a1ad7" />
+      <stop offset="1" stop-color="#6412c0" />
+    </linearGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f23b27" />
+      <stop offset="1" stop-color="#de2618" />
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="#050407" />
-  <rect x="7" y="7" width="4" height="18" rx="2" fill="url(#magnus-bar)" />
-  <path d="M15 25V7l5 9 5-9v18" fill="none" stroke="#f0eef6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+  <g clip-path="url(#c)">
+    <path d="M0 0H13L32 36H0Z" fill="#2d1b8e" />
+    <path d="M51 0H64V36H32Z" fill="#1a145c" />
+    <path d="M13 0H51L32 36Z" fill="url(#v)" />
+    <rect y="36" width="64" height="28" fill="url(#r)" />
+  </g>
 </svg>

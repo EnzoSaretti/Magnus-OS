@@ -24,3 +24,16 @@ export async function requireSessionUser(): Promise<SessionUser> {
   if (!user) redirect('/entrar');
   return user;
 }
+
+export interface Profile {
+  fullName: string | null;
+  firstName: string | null;
+}
+
+/** The signed-in user's own profile row (readable under RLS). Cached per request. */
+export const getProfile = cache(async (userId: string): Promise<Profile> => {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.from('profiles').select('full_name').eq('id', userId).maybeSingle();
+  const fullName = data?.full_name?.trim() || null;
+  return { fullName, firstName: fullName?.split(/\s+/)[0] ?? null };
+});

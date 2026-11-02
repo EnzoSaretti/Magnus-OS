@@ -1,63 +1,112 @@
 import type { Metadata } from 'next';
+import { Bot, ListChecks, ShieldCheck, Wallet } from 'lucide-react';
 import { StatusChip } from '@magnus/ui';
+import { ActivityPanel } from '@/components/dashboard/activity-panel';
+import { ApprovalsPanel } from '@/components/dashboard/approvals-panel';
+import { AssistantCard } from '@/components/dashboard/assistant-card';
+import { KpiTile } from '@/components/dashboard/kpi-tile';
 import { OperationsTimeline } from '@/components/dashboard/operations-timeline';
-import { PLATFORM_ITEMS } from '@/content/modules';
+import { PlatformStatus } from '@/components/dashboard/platform-status';
+import { RunsPanel } from '@/components/dashboard/runs-panel';
+import { TaskStatusPanel } from '@/components/dashboard/task-status-panel';
+import { demoKpis } from '@/content/demo/dashboard';
 import { ptBR } from '@/content/pt-BR';
+import { getProfile, requireSessionUser } from '@/lib/auth/session';
 
 export const metadata: Metadata = { title: ptBR.dashboard.title };
 
-export default function DashboardPage() {
+const TIME_ZONE = 'America/Sao_Paulo';
+const longDate = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: TIME_ZONE });
+const shortDay = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', timeZone: TIME_ZONE });
+const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'USD' });
+
+function lastDays(count: number, today: Date): string[] {
+  return Array.from({ length: count }, (_, i) => shortDay.format(new Date(today.getTime() - (count - 1 - i) * 86_400_000)));
+}
+
+export default async function DashboardPage() {
+  const user = await requireSessionUser();
+  const profile = await getProfile(user.id);
+  const today = new Date();
+  const dateLine = longDate.format(today);
   const d = ptBR.dashboard;
+  const k = d.kpis;
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="mb-2">
-        <h1 className="font-wide text-3xl font-semibold tracking-tight text-mist-50 sm:text-4xl">{d.title}</h1>
-        <p className="mt-2 text-lg text-mist-300">{d.summary}</p>
+      <header className="flex flex-col gap-5 pt-1 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p className="text-sm text-mist-300">{dateLine.charAt(0).toUpperCase() + dateLine.slice(1)}</p>
+          <h1 className="mt-1 font-wide text-3xl font-semibold tracking-tight text-mist-50 sm:text-4xl">
+            {d.greeting(profile.firstName)}
+          </h1>
+        </div>
+        <p className="flex max-w-xl gap-3 rounded-panel border border-dashed border-ember-300/40 bg-ember-950/40 px-4 py-3 text-sm leading-6 text-mist-100">
+          <span className="mt-0.5 shrink-0">
+            <StatusChip tone="demo">{ptBR.status.demo}</StatusChip>
+          </span>
+          {d.demoNotice}
+        </p>
       </header>
 
-      <OperationsTimeline />
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <section
-          aria-labelledby="attention-title"
-          className="rounded-panel border border-graphite-800 border-l-ember-500 border-l-2 bg-graphite-900 p-5 sm:p-6"
-        >
-          <h2 id="attention-title" className="text-base font-medium text-mist-50">
-            {d.attention.title}
-          </h2>
-          <p className="mt-4 font-wide text-xl font-medium text-mist-100">{d.attention.empty}</p>
-          <p className="mt-2 max-w-[60ch] text-sm leading-6 text-mist-300">{d.attention.explanation}</p>
-        </section>
-
-        <section aria-labelledby="agents-title" className="rounded-panel border border-graphite-800 bg-graphite-900 p-5 sm:p-6">
-          <h2 id="agents-title" className="text-base font-medium text-mist-50">
-            {d.agents.title}
-          </h2>
-          <p className="mt-4 font-wide text-xl font-medium text-mist-100">{d.agents.empty}</p>
-          <p className="mt-2 text-sm leading-6 text-mist-300">{d.agents.explanation}</p>
-        </section>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <KpiTile
+          icon={Bot}
+          tone="magnus"
+          label={k.agents.label}
+          value={String(demoKpis.agents.value)}
+          detail={k.agents.delta(demoKpis.agents.delta)}
+          trend={demoKpis.agents.trend}
+          href="/agentes"
+          demo
+        />
+        <KpiTile
+          icon={ListChecks}
+          tone="teal"
+          label={k.tasksDone.label}
+          value={demoKpis.tasksDone.value.toLocaleString('pt-BR')}
+          detail={k.tasksDone.delta(demoKpis.tasksDone.delta)}
+          trend={demoKpis.tasksDone.trend}
+          href="/tarefas"
+          demo
+        />
+        <KpiTile
+          icon={ShieldCheck}
+          tone="ember"
+          label={k.awaitingYou.label}
+          value={String(demoKpis.awaitingYou.value)}
+          detail={k.awaitingYou.detail}
+          href="/aprovacoes"
+          demo
+        />
+        <KpiTile
+          icon={Wallet}
+          tone="violet"
+          label={k.aiCost.label}
+          value={currency.format(demoKpis.aiCost.value)}
+          detail={k.aiCost.delta(demoKpis.aiCost.delta)}
+          trend={demoKpis.aiCost.trend}
+          href="/relatorios"
+          demo
+        />
       </div>
 
-      <section aria-labelledby="platform-title" className="pt-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-          <h2 id="platform-title" className="text-base font-medium text-mist-50">
-            {d.platform.title}
-          </h2>
-          <p className="text-sm text-graphite-500">{d.platform.caption}</p>
-        </div>
-        <ul className="mt-4 grid border-t border-graphite-800 xl:grid-cols-2 xl:gap-x-10">
-          {PLATFORM_ITEMS.map((item) => (
-            <li key={item.key} className="flex items-center gap-4 border-b border-graphite-800 py-3.5">
-              <span className="w-10 shrink-0 text-sm tabular-nums text-graphite-500">
-                {ptBR.shell.phaseShort(item.phase)}
-              </span>
-              <span className="flex-1 text-[0.95rem] text-mist-100">{ptBR.platformItems[item.key]}</span>
-              <StatusChip tone={item.status}>{ptBR.status[item.status]}</StatusChip>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="grid gap-4 xl:grid-cols-12">
+        <RunsPanel className="xl:col-span-8" labels={{ '7d': lastDays(7, today), '30d': lastDays(30, today) }} />
+        <TaskStatusPanel className="xl:col-span-4" />
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <ApprovalsPanel className="xl:col-span-7" />
+        <AssistantCard className="xl:col-span-5" />
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <OperationsTimeline className="xl:col-span-7" />
+        <ActivityPanel className="xl:col-span-5" />
+      </div>
+
+      <PlatformStatus />
     </div>
   );
 }

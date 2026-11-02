@@ -1,43 +1,58 @@
 /*
- * MAGNUS design tokens (Tailwind CSS v4).
+ * MAGNUS design tokens (Tailwind CSS v4), aligned with the official logo.
  *
  * Color carries meaning, never decoration:
- *   magnus (purple)  — agents and the platform at work
+ *   magnus (purple)    — agents and the platform at work
  *   ember (red-orange) — a human decision is needed (approvals, sensitive actions)
- *   graphite / onyx — the structure everything sits on
+ *   graphite / onyx    — the structure everything sits on
+ *   brand-*            — the logo's own colors, used for the mark and brand moments only
+ *   chart-*            — categorical chart slots, validated for the dark surface
  *
  * Import after `tailwindcss` in the app stylesheet.
  */
 
 @theme {
   --color-onyx: #050407;
-  --color-graphite-950: #0b0a0f;
-  --color-graphite-900: #131218;
-  --color-graphite-850: #18161f;
-  --color-graphite-800: #1f1d28;
-  --color-graphite-700: #2b2935;
-  --color-graphite-600: #3a3746;
-  --color-graphite-500: #6f6b7e;
+  --color-graphite-950: #09080d;
+  --color-graphite-900: #111017;
+  --color-graphite-850: #16141e;
+  --color-graphite-800: #1d1b27;
+  --color-graphite-700: #2a2735;
+  --color-graphite-600: #3a3747;
+  --color-graphite-500: #716d81;
 
-  --color-mist-300: #aaa6b9;
-  --color-mist-100: #dcd9e6;
-  --color-mist-50: #f0eef6;
+  --color-mist-300: #aca8bb;
+  --color-mist-100: #dedbe8;
+  --color-mist-50: #f2f0f8;
 
+  --color-magnus-950: #160f33;
   --color-magnus-700: #4a28d6;
   --color-magnus-600: #5b36f2;
   --color-magnus-500: #7352ff;
-  --color-magnus-300: #b6a6ff;
-  --color-magnus-950: #17112f;
+  --color-magnus-400: #8b6dff;
+  --color-magnus-300: #b9a9ff;
 
-  --color-ember-600: #e6421a;
-  --color-ember-500: #ff5b2e;
-  --color-ember-300: #ffa07f;
-  --color-ember-950: #2a1009;
+  --color-ember-950: #2b0d08;
+  --color-ember-700: #b81f12;
+  --color-ember-600: #de2618;
+  --color-ember-500: #f23b27;
+  --color-ember-400: #f2503a;
+  --color-ember-300: #ff9c88;
+
+  --color-brand-indigo: #2d1b8e;
+  --color-brand-navy: #1a145c;
+  --color-brand-violet: #8a1ad7;
+  --color-brand-violet-deep: #6412c0;
+
+  /* Validated with the dataviz palette checks against graphite-900 (dark). */
+  --color-chart-1: #8b6dff;
+  --color-chart-2: #1a9db2;
+  --color-chart-3: #f2503a;
 
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 
-  --radius-panel: 14px;
-  --radius-control: 9px;
+  --radius-panel: 20px;
+  --radius-control: 10px;
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -72,6 +87,15 @@
 
 @utility font-condensed {
   font-variation-settings: 'wdth' 88;
+}
+
+/* Raised surface used by dashboard cards: a hairline border and a faint top light. */
+@utility surface-card {
+  border: 1px solid var(--color-graphite-800);
+  border-radius: var(--radius-panel);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 40%),
+    var(--color-graphite-900);
 }
 
 @media (prefers-reduced-motion: reduce) {

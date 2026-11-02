@@ -13,8 +13,6 @@ export const ptBR = {
     openMenu: 'Abrir menu',
     closeMenu: 'Fechar menu',
     noOrganization: 'Nenhuma organização',
-    previewNotice:
-      'Você já entra com a sua conta. Organizações chegam na Fase 1.5 e agentes na Fase 2; até lá, estas telas mostram o que vem e quando.',
     environment: {
       development: 'Desenvolvimento',
       staging: 'Staging',
@@ -96,24 +94,81 @@ export const ptBR = {
     integracoes: 'Integrações',
     configuracoes: 'Configurações',
   },
+  navGroups: {
+    operation: 'Operação',
+    knowledge: 'Conhecimento',
+    platform: 'Plataforma',
+  },
+  account: {
+    menu: 'Menu da conta',
+    organizationHint: 'Organizações chegam na Fase 1.5',
+  },
+  buildProgress: {
+    title: 'Construção da plataforma',
+    detail: (live: number, total: number) => `${live} de ${total} capacidades funcionando`,
+    link: 'Ver estado da plataforma',
+  },
   dashboard: {
     title: 'Painel',
-    summary: 'Nenhum agente em operação ainda.',
+    greeting: (firstName: string | null) => (firstName ? `Olá, ${firstName}` : 'Olá'),
+    demoNotice:
+      'Os indicadores abaixo são dados de demonstração. Eles mostram como o painel vai funcionar quando os agentes entrarem em operação, na Fase 2; nenhum número representa a sua empresa.',
+    kpis: {
+      agents: { label: 'Agentes em operação', delta: (d: string) => `${d} este mês` },
+      tasksDone: { label: 'Tarefas concluídas no mês', delta: (d: string) => `${d} sobre o mês anterior` },
+      awaitingYou: { label: 'Aguardando você', detail: 'ações paradas esperando uma decisão' },
+      aiCost: { label: 'Custo de IA no mês', delta: (d: string) => `${d} sobre o mês anterior` },
+      open: (label: string) => `Abrir ${label}`,
+    },
+    runs: {
+      title: 'Execuções dos agentes',
+      tasks: 'Tarefas',
+      approvals: 'Aprovações',
+      tasksLong: 'Tarefas executadas',
+      approvalsLong: 'Aprovações pedidas',
+      periodLabel: 'Período do gráfico',
+      periods: { '7d': '7 dias', '30d': '30 dias' },
+      aria: (period: string) => `Tarefas executadas e aprovações pedidas por dia nos últimos ${period}`,
+    },
+    taskStatus: {
+      title: 'Tarefas do mês',
+      caption: 'tarefas no mês',
+      done: 'Concluídas',
+      inProgress: 'Em andamento',
+      awaitingApproval: 'Aguardando aprovação',
+      aria: 'Distribuição das tarefas do mês por status',
+    },
+    approvals: {
+      title: 'Aguardando você',
+      subtitle: 'Ações sensíveis param aqui até alguém decidir.',
+      review: 'Revisar',
+      viewAll: 'Ver todas as aprovações',
+      risks: { write_external: 'Ação externa', financial: 'Financeira', destructive: 'Destrutiva' },
+    },
+    activity: {
+      title: 'Atividade dos agentes',
+      viewAll: 'Ver tarefas',
+      statuses: { done: 'Concluída', running: 'Em andamento', awaiting: 'Aguardando você' },
+    },
+    assistant: {
+      title: 'Assistente MAGNUS',
+      prompt: 'Como posso ajudar?',
+      body: 'Peça resumos, crie tarefas para os agentes ou consulte a memória da empresa em linguagem natural.',
+      suggestions: [
+        { label: 'Ver aprovações pendentes', href: '/aprovacoes' },
+        { label: 'Resumo da operação de hoje', href: '/relatorios' },
+        { label: 'Criar tarefa para um agente', href: '/tarefas' },
+        { label: 'Consultar a memória da empresa', href: '/memoria' },
+      ],
+      inputLabel: 'Pergunte ao assistente',
+      inputPlaceholder: 'O assistente chega na Fase 2',
+    },
     timeline: {
       title: 'Linha de operação de hoje',
       now: 'agora',
+      runs: 'Execuções',
+      approvals: 'Pedidos de aprovação',
       empty: 'Nenhuma atividade de agente registrada hoje.',
-    },
-    attention: {
-      title: 'Aguardando você',
-      empty: 'Nada aguardando aprovação.',
-      explanation:
-        'Quando um agente propõe enviar algo para fora da empresa, apagar dados ou mexer com dinheiro, a ação para aqui até alguém aprovar.',
-    },
-    agents: {
-      title: 'Agentes',
-      empty: 'Nenhum agente criado.',
-      explanation: 'Na Fase 2 você cria agentes com especialidade, objetivo, ferramentas autorizadas e limites.',
     },
     platform: {
       title: 'Estado da plataforma',
