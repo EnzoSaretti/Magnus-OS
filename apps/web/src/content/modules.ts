@@ -48,8 +48,8 @@ export interface PlatformItem {
 export const PLATFORM_ITEMS: readonly PlatformItem[] = [
   { key: 'isolation', phase: '0', status: 'live' },
   { key: 'roles', phase: '1.2', status: 'live' },
-  { key: 'interface', phase: '1.3', status: 'building' },
-  { key: 'auth', phase: '1.4', status: 'planned' },
+  { key: 'interface', phase: '1.3', status: 'live' },
+  { key: 'auth', phase: '1.4', status: 'building' },
   { key: 'organizations', phase: '1.5', status: 'planned' },
   { key: 'agents', phase: '2', status: 'planned' },
   { key: 'memory', phase: '3', status: 'planned' },

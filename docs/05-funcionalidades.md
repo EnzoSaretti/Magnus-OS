@@ -22,6 +22,10 @@ Escopo V1: cadastro/login (e-mail, link mágico, Google), MFA para admins, criar
 papéis, troca de organização, visualizador de auditoria.
 Fora da V1: SSO/SAML, provisionamento SCIM.
 
+Status: **Em construção.** Cadastro, login com senha, link de acesso por e-mail, sair e proteção do
+console funcionando (F1.4a). Verificação em duas etapas (F1.4b) e Google (F1.4c) pendentes;
+organizações e convites na interface na F1.5.
+
 ### Central de controle (Dashboard) — layout na Fase 1, indicadores na Fase 4
 
 Escopo V1: visão da organização (execuções de agentes, tarefas por status, aprovações pendentes, custo

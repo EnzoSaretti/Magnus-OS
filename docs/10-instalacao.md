@@ -39,9 +39,21 @@ npm run check
 
 ## Variáveis de ambiente
 
-Copie [`.env.example`](../.env.example) para `apps/web/.env.local` quando precisar mudar algo. Hoje só
-`NEXT_PUBLIC_MAGNUS_ENV` é lida (rótulo do ambiente na barra superior; padrão "Desenvolvimento").
-Nunca faça commit de arquivos `.env*` com valores reais.
+Copie [`.env.example`](../.env.example) para `apps/web/.env.local` e preencha a URL e a **chave
+publicável** do projeto Supabase de staging (Project Settings → API). A chave publicável é pública por
+natureza (a RLS protege os dados); a chave secreta **nunca** vai para o app web. Nunca faça commit de
+arquivos `.env*` com valores reais.
+
+## Configuração do Supabase Auth (uma vez por ambiente)
+
+No painel do Supabase → Authentication → URL Configuration:
+
+- **Site URL:** `http://localhost:3000` (staging local) — em produção, o domínio do app.
+- **Redirect URLs:** adicionar `http://localhost:3000/**`.
+
+Sem isso, os links de confirmação e de acesso por e-mail não voltam para o app. O envio de e-mails
+padrão do Supabase permite poucos e-mails por hora — suficiente para testes; produção usará SMTP
+próprio (D-16).
 
 ## Integração contínua
 

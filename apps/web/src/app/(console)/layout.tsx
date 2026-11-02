@@ -3,8 +3,11 @@ import { ptBR } from '@/content/pt-BR';
 import { PreviewNotice } from '@/components/shell/preview-notice';
 import { Sidebar } from '@/components/shell/sidebar';
 import { Topbar } from '@/components/shell/topbar';
+import { requireSessionUser } from '@/lib/auth/session';
 
-export default function ConsoleLayout({ children }: { children: ReactNode }) {
+export default async function ConsoleLayout({ children }: { children: ReactNode }) {
+  const user = await requireSessionUser();
+
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[4.75rem_minmax(0,1fr)] lg:grid-cols-[16.5rem_minmax(0,1fr)]">
       <a
@@ -15,7 +18,7 @@ export default function ConsoleLayout({ children }: { children: ReactNode }) {
       </a>
       <Sidebar />
       <div className="flex min-w-0 flex-col">
-        <Topbar />
+        <Topbar userEmail={user.email} />
         <main id="conteudo" className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-16 sm:px-6 lg:px-10 lg:pt-8">
           <PreviewNotice />
           {children}

@@ -67,7 +67,7 @@ flowchart LR
 | `apps/worker` | Consome a fila: execuções de agentes, passos de workflow, relatórios agendados, ingestão da memória (extração, chunking, embeddings). | Fase 2 |
 | `packages/core` | Domínio puro, sem dependências: papéis e permissões, política de ações de agentes, limites de execução, tipos compartilhados. | **Iniciado** ✅ |
 | `packages/ai` | Contrato agnóstico de provedor (`ModelProvider`, `EmbeddingProvider`), catálogo de modelos e estimativa de custo; adaptadores (Anthropic primeiro). | **Contrato iniciado** ✅ |
-| `packages/db` | Clientes Supabase/Postgres, tipos gerados do schema, helper `withTenant()` para o worker, repositórios por módulo. | Fase 1 |
+| `packages/db` | Clientes Supabase/Postgres, tipos gerados do schema, helper `withTenant()` para o worker, repositórios por módulo. | **Iniciado** ✅ (tipos gerados do schema; clientes ficam em cada app) |
 | `packages/agents` | Runtime: registro de ferramentas, loop do agente, aplicação da política, pausa para aprovação, delegação. | Fase 2 |
 | `packages/memory` | Ingestão de documentos, chunking, embeddings, busca híbrida (vetorial + texto) com escopo de organização. | Fase 3 |
 | `packages/workflows` | Definições versionadas de fluxos, gatilhos, motor de execução sobre a fila. | Fase 5 |
@@ -146,7 +146,7 @@ magnus-os/
 ├── packages/
 │   ├── core/          ✅       # domínio puro: tenancy, permissions, agent-policy
 │   ├── ai/            ✅       # contrato de provedores + catálogo; adapters/ na Fase 2
-│   ├── db/                     # Fase 1 — clientes, tipos gerados, withTenant()
+│   ├── db/                     # ✅ F1.4 — tipos gerados (withTenant() na Fase 2)
 │   ├── agents/                 # Fase 2 — runtime, ferramentas, aprovações
 │   ├── memory/                 # Fase 3 — ingestão e recuperação
 │   ├── workflows/              # Fase 5 — motor de fluxos
@@ -187,8 +187,8 @@ Versões abaixo consultadas no npm em 2026-11-01; serão confirmadas na instala�
 | `next` 16.x, `react`/`react-dom` 19.x | App web | 1 ✅ | Next 16 com Turbopack; build e checagem de tipos funcionam com o TypeScript 7. |
 | `tailwindcss` 4.x + `@tailwindcss/postcss` | Estilos (tokens em `packages/ui`) | 1 ✅ | |
 | `lucide-react` | Ícones de interface consistentes e acessíveis (importados um a um, sem peso morto) | 1 ✅ | Licença ISC. |
-| `@supabase/supabase-js` 2.x, `@supabase/ssr` | Cliente com sessão do usuário (RLS) | 1 | |
-| `zod` 4.x | Validação de entrada (forms, API, entradas de ferramentas) | 1 | |
+| `@supabase/supabase-js` 2.x, `@supabase/ssr` | Cliente com sessão do usuário via cookies (RLS) | 1 ✅ | Sessão validada com `getClaims()` (assinatura do JWT). |
+| `zod` 4.x | Validação de entrada (forms, API, entradas de ferramentas) | 1 ✅ | Usado nas ações de login e cadastro. |
 | `@radix-ui/*` (seletivo) | Primitivas acessíveis (dialog, menu, tooltip) | 1 | Apenas as usadas. |
 | `@playwright/test` | Testes ponta a ponta (fluxos críticos e isolamento) | 1 | |
 | `@anthropic-ai/sdk` 1.x | Adaptador Anthropic | 2 | Só em `packages/ai/src/adapters/`. |

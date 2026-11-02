@@ -24,6 +24,18 @@
   servidor antes de ações administrativas.
 - SSO/SAML corporativo após validação comercial.
 
+Implementado na F1.4a ✅:
+
+- Sessão em cookies gerenciados por `@supabase/ssr`; o proxy renova a sessão a cada requisição e as
+  páginas do console verificam a sessão de novo no servidor (`getClaims()` valida a assinatura do JWT),
+  sem confiar só no redirecionamento.
+- Fluxo PKCE para links de e-mail e OAuth (código de uso único trocado por sessão em `/auth/callback`).
+- Redirecionamento pós-login aceita apenas caminhos relativos do próprio site (proteção contra *open
+  redirect*, com testes).
+- Login sem senha não cria contas e responde igual exista ou não a conta (não revela e-mails
+  cadastrados); erros de login são genéricos ("e-mail ou senha incorretos").
+- Senha entre 10 e 72 caracteres, validada no servidor; a chave secreta do Supabase não existe no app.
+
 ## 3. Autorização (três camadas)
 
 1. **Banco (autoridade final):** RLS + privilégios explícitos ✅.

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Wordmark } from '@magnus/ui';
+import { signOut } from '@/lib/auth/actions';
 import { ptBR } from '@/content/pt-BR';
 import { MobileNav } from './mobile-nav';
 
@@ -10,7 +11,7 @@ function currentEnvironment(): Environment {
   return value === 'staging' || value === 'production' ? value : 'development';
 }
 
-export function Topbar() {
+export function Topbar({ userEmail }: { userEmail: string | null }) {
   const environment = currentEnvironment();
 
   return (
@@ -24,14 +25,30 @@ export function Topbar() {
       <p className="hidden text-sm text-graphite-500 md:block lg:hidden">{ptBR.shell.noOrganization}</p>
       <span className="hidden lg:block" />
 
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 items-center gap-3">
         {environment !== 'production' && (
-          <span className="rounded-full border border-graphite-700 px-2.5 py-0.5 text-xs text-mist-300">
+          <span className="shrink-0 rounded-full border border-graphite-700 px-2.5 py-0.5 text-xs text-mist-300">
             {ptBR.shell.environment[environment]}
           </span>
         )}
+        {userEmail && (
+          <div className="hidden min-w-0 items-center gap-3 md:flex">
+            <span className="truncate text-sm text-mist-300" title={userEmail}>
+              <span className="sr-only">{ptBR.shell.signedInAs} </span>
+              {userEmail}
+            </span>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="rounded-control px-2.5 py-1.5 text-sm font-medium text-mist-100 transition-colors hover:bg-graphite-850"
+              >
+                {ptBR.auth.signOut}
+              </button>
+            </form>
+          </div>
+        )}
         <div className="md:hidden">
-          <MobileNav />
+          <MobileNav userEmail={userEmail} />
         </div>
       </div>
     </header>

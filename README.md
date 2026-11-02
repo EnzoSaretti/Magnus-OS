@@ -5,8 +5,8 @@ especializados, memória empresarial, tarefas com aprovação humana e um centro
 com isolamento total entre empresas.
 
 > **Status: Fase 1 em andamento.** Schema multiempresa com RLS no staging (Supabase, São Paulo),
-> convites, regras de domínio dos agentes e a prévia da interface do centro de controle (ainda sem
-> login e sem dados). Veja o que precisa de decisão em
+> convites, regras de domínio dos agentes, interface do centro de controle e login (cadastro, senha,
+> link por e-mail). Organizações na interface e agentes ainda não. Veja o que precisa de decisão em
 > [docs/09-decisoes-pendentes.md](docs/09-decisoes-pendentes.md).
 
 ## Estrutura

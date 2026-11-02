@@ -1,0 +1,11 @@
+{
+  "name": "@magnus/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Database types generated from the Supabase schema. Clients that depend on a runtime (Next.js, worker) live in each app.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

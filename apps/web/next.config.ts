@@ -10,7 +10,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  transpilePackages: ['@magnus/ui', '@magnus/core'],
+  transpilePackages: ['@magnus/ui', '@magnus/core', '@magnus/db'],
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

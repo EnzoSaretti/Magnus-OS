@@ -39,6 +39,11 @@ políticas RLS ficam no schema `private` (fora da API); em `public` só comandos
 O app web nunca usa a chave secreta do Supabase. Mudanças nas regras de papéis devem ser espelhadas em
 `packages/core/src/tenancy.ts`.
 
+Auth no app web: clientes em `apps/web/src/lib/supabase/` (publishable key + cookies); toda página
+protegida chama `requireSessionUser()` (o `src/proxy.ts` só faz o redirecionamento otimista);
+redirecionamentos pós-login passam por `safeNextPath()`. Depois de cada migração, regenere
+`packages/db/src/database.types.ts`.
+
 Staging: projeto Supabase `magnus-staging` (`rxfuwrkfjvfxjidzxdyc`, sa-east-1). Depois de aplicar
 migrações em um banco hospedado: avisos de segurança/desempenho do Supabase +
 `supabase/tests/smoke/isolation-smoke.sql`. Nunca dados reais de clientes no staging. Migrações já

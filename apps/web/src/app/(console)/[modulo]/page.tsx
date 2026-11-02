@@ -2,17 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { StatusChip } from '@magnus/ui';
-import { MODULE_IDS, MODULES, isModuleId } from '@/content/modules';
+import { MODULES, isModuleId } from '@/content/modules';
 import { ptBR } from '@/content/pt-BR';
 
 interface ModulePageProps {
   params: Promise<{ modulo: string }>;
-}
-
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return MODULE_IDS.map((modulo) => ({ modulo }));
 }
 
 export async function generateMetadata({ params }: ModulePageProps): Promise<Metadata> {

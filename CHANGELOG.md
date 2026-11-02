@@ -3,6 +3,36 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-02 · Fase 1.4a — Login
+
+**Entregue**
+
+- Telas `/entrar` (e-mail + senha, link de acesso por e-mail, botão do Google atrás de
+  `NEXT_PUBLIC_AUTH_GOOGLE_ENABLED`), `/cadastro` (nome, e-mail, senha) e `/verifique-o-email`, com
+  layout próprio de autenticação.
+- Ações de servidor com validação (zod) e mensagens em PT-BR para os erros do Supabase; rotas
+  `/auth/callback` (PKCE) e `/auth/confirm` (token_hash).
+- `src/proxy.ts` (Next 16): renova a sessão em toda requisição, manda visitantes para `/entrar?next=…`
+  e usuários logados para fora das telas de login. O console verifica a sessão de novo no servidor e
+  mostra o e-mail e o botão Sair (barra superior no desktop, menu no celular).
+- `packages/db`: tipos TypeScript gerados do schema do staging.
+- `NEXT_PUBLIC_SITE_URL` e `NEXT_PUBLIC_AUTH_GOOGLE_ENABLED` no `.env.example`; instruções de
+  configuração do Supabase Auth em `docs/10-instalacao.md`.
+
+**Verificado**
+
+- `npm run check`: typecheck e 69 testes (6 novos: redirecionamento seguro, rotas públicas, mapeamento
+  de erros).
+- `npm run build` com e sem as variáveis do Supabase (como no CI).
+- No navegador: `/agentes` sem sessão redireciona para `/entrar?next=%2Fagentes`; formulário vazio
+  mostra os erros de validação sem chamar o Supabase; `/auth/callback` sem código mostra "O link
+  expirou"; cadastro no celular; sem erros no servidor.
+
+**Não verificado**
+
+- Cadastro e login com uma conta real (envio e clique no e-mail de confirmação): por regra, eu não
+  digito credenciais; o teste é do fundador.
+
 ## 2026-11-02 · Fase 1.3 — App web e design system
 
 **Entregue**
