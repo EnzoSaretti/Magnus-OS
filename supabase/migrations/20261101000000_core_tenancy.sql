@@ -13,7 +13,6 @@
 --   * An organization always keeps at least one owner.
 --   * audit_log is append-only for application roles and readable by admins.
 --
--- Status: draft, not applied to any hosted database yet.
 -- Tests:  supabase/tests/rls-tenancy.test.ts
 -- =============================================================================
 

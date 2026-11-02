@@ -17,7 +17,6 @@
 --   MG003  the person is already a member of the organization
 --   42501  caller may not invite with / revoke that role
 --
--- Status: draft, not applied to any hosted database yet.
 -- Tests:  supabase/tests/invitations.test.ts
 -- =============================================================================
 

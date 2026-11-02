@@ -3,6 +3,30 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-02 · Fase 1.1 — Supabase de staging
+
+**Entregue**
+
+- Projeto Supabase `magnus-staging` (`rxfuwrkfjvfxjidzxdyc`) em sa-east-1, organização Saretti Corp,
+  plano gratuito (custo US$ 0/mês confirmado pelo fundador).
+- Migrações aplicadas: núcleo multiempresa, convites e a nova
+  `20261102000000_private_auth_helpers.sql`, que move os auxiliares de autorização para o schema
+  `private` (fora da API) e indexa chaves estrangeiras apontadas pelo Supabase.
+- Roteiro `supabase/tests/smoke/isolation-smoke.sql` para verificar isolamento em bancos hospedados.
+- Documentação de ambientes, mapeamento de versões das migrações e avisos aceitos por design
+  ([04-banco-de-dados.md](docs/04-banco-de-dados.md#8-ambientes)).
+- Removida a linha "Status: draft, not applied…" (apenas comentário) das duas primeiras migrações.
+
+**Verificado**
+
+- CI do GitHub verde nas execuções #1 (`30f3c08`) e #2 (`95d2e56`): typecheck, testes e gitleaks.
+- `npm run check`: 63 testes passando (novo teste: auxiliares fora do schema `public` e fechados para
+  `anon`); mutações nas funções movidas detectadas.
+- Avisos de segurança do Supabase: de 11 para 6; os 6 restantes são os comandos RPC intencionais.
+  Avisos de desempenho: apenas "índice não usado" (banco vazio).
+- Roteiro de isolamento no banco real: 12/12 cenários ok; nenhum dado de teste permaneceu
+  (contagem de usuários, organizações, vínculos, convites e auditoria = 0).
+
 ## 2026-11-01 · Fase 1.2 — Convites no banco
 
 **Entregue**

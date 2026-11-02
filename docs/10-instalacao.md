@@ -49,7 +49,10 @@ commit de arquivos `.env*` com valores reais.
 
 1. ✅ Projeto fora do OneDrive (D-01) e Git inicializado.
 2. ✅ Repositório privado no GitHub (`EnzoSaretti/Magnus-OS`) e primeiro push (D-02).
-3. Proteger `main` no GitHub (exigir PR e CI verde).
-4. Criar projeto Supabase de staging em sa-east-1 (D-04) e instalar a Supabase CLI para aplicar
-   migrações (`supabase db push`) e gerar tipos.
-5. Criar `apps/web` (Next.js 16) — Fase 1.3.
+3. Proteger `main` no GitHub (exigir PR e CI verde) — requer GitHub Pro em repositório privado de
+   conta pessoal; até lá, o fluxo de branch + PR é seguido por disciplina.
+4. ✅ Projeto Supabase de staging `magnus-staging` em sa-east-1 com as migrações aplicadas
+   ([detalhes](04-banco-de-dados.md#8-ambientes)).
+5. Instalar a Supabase CLI, versionar `supabase/config.toml`, alinhar o histórico de migrações do
+   staging e gerar tipos — junto com `packages/db` (F1.4).
+6. Criar `apps/web` (Next.js 16) — Fase 1.3.

@@ -28,7 +28,7 @@ export function hasRole(actual: OrgRole | null | undefined, required: OrgRole): 
 /**
  * Whether `actor` may act on a membership whose role is `targetRole`.
  * Owners manage everyone; admins manage only members and viewers.
- * Mirrors public.can_manage_role().
+ * Mirrors private.can_manage_role().
  */
 export function canManageRole(actor: OrgRole | null | undefined, targetRole: OrgRole): boolean {
   if (hasRole(actor, 'owner')) return true;

@@ -96,10 +96,21 @@ describe('core tenancy and row-level security', () => {
 
     const [probe] = await rows<{ role: string | null; member: boolean }>(
       'bob',
-      'select public.current_org_role($1) as role, public.is_org_member($1) as member',
+      'select private.current_org_role($1) as role, private.is_org_member($1) as member',
       [acme],
     );
     assert.deepEqual(probe, { role: null, member: false });
+  });
+
+  test('authorization helpers live outside the API schema and are closed to anon', async () => {
+    const exposed = await rows<{ proname: string }>(
+      'service',
+      `select p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+       where n.nspname = 'public'
+         and p.proname in ('current_org_role', 'is_org_member', 'has_org_role', 'can_manage_role', 'shares_org_with')`,
+    );
+    assert.deepEqual(exposed, []);
+    await assert.rejects(rows('anon', 'select private.is_org_member($1)', [acme]), PERMISSION_DENIED);
   });
 
   test('application roles cannot write tenancy tables directly', async () => {

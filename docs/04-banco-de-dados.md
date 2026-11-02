@@ -30,7 +30,9 @@
 5. **Teste de isolamento** em `supabase/tests/` para cada tabela nova: outro tenant não lê, não altera,
    não referencia.
 6. Chaves `uuid` (`gen_random_uuid()`), datas `timestamptz`, JSON em `jsonb` com `check` de tipo.
-7. Funções `security definer` sempre com `set search_path = ''` e nomes qualificados.
+7. Funções `security definer` sempre com `set search_path = ''` e nomes qualificados. **Auxiliares de
+   autorização usados por políticas ficam no schema `private`** (não exposto pela API); em `public`
+   ficam apenas os comandos que o app chama via RPC.
 8. Dados de demonstração marcados com `is_demo boolean not null default false` nas tabelas que os recebem.
 
 ## 2. Papéis
@@ -132,3 +134,31 @@ npm run test:db
 
 Sobe um Postgres em memória (PGlite), aplica um shim mínimo do Supabase (`supabase/tests/support/`) e
 todas as migrações em ordem, e executa os cenários como `anon`, usuários autenticados e `service_role`.
+
+Em um banco hospedado, depois de aplicar migrações: rode os avisos de segurança/desempenho do Supabase
+e o roteiro [`supabase/tests/smoke/isolation-smoke.sql`](../supabase/tests/smoke/isolation-smoke.sql).
+Ele sempre termina com o erro `QA_RESULT …` (de propósito, para desfazer tudo); todos os itens devem
+terminar em "(ok)".
+
+## 8. Ambientes
+
+| Ambiente | Projeto Supabase | Região | Plano | Uso |
+|---|---|---|---|---|
+| Staging | `magnus-staging` (`rxfuwrkfjvfxjidzxdyc`), organização Saretti Corp | sa-east-1 | Free (pausa após 7 dias sem uso; sem backup diário) | Testes e demonstração. **Nunca dados reais de clientes.** |
+| Produção | — | sa-east-1 | Pro (a contratar) | Clientes |
+
+**Migrações aplicadas no staging (2026-11-02).** Foram aplicadas pela integração MCP do Supabase, que
+registra versões com o horário da aplicação. Ao adotar a Supabase CLI, alinhar o histórico com
+`supabase migration repair`:
+
+| Arquivo no repositório | Versão registrada no staging |
+|---|---|
+| `20261101000000_core_tenancy.sql` | `20261102014127` |
+| `20261101120000_invitations.sql` | `20261102014154` |
+| `20261102000000_private_auth_helpers.sql` | `20261102014423` |
+
+**Avisos do Supabase aceitos por design:** `public.create_organization`, `create_invitation`,
+`accept_invitation`, `revoke_invitation` (usuário autenticado) e `invitation_preview` (inclusive
+anônimo) são `security definer` chamáveis pela API **de propósito**: são os comandos do produto e cada
+um valida o chamador (`auth.uid()`, papel, e-mail confirmado ou posse do token). Avisos de índice não
+utilizado são esperados enquanto o banco está vazio.
