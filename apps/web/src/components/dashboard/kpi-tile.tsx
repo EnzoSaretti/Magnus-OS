@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { ArrowUpRight, TrendingDown, TrendingUp, type LucideIcon } from 'lucide-react';
-import { StatusChip } from '@magnus/ui';
 import { ptBR } from '@/content/pt-BR';
 
 const TONES = {
@@ -19,11 +18,13 @@ export interface KpiTileProps {
   detail: string;
   trend?: 'up' | 'down';
   href: string;
-  demo?: boolean;
 }
 
-/** Headline number with its context; the arrow opens the module behind it. */
-export function KpiTile({ icon: Icon, tone, label, value, detail, trend, href, demo = false }: KpiTileProps) {
+/**
+ * Headline number with its context; the arrow opens the module behind it.
+ * Demonstration status is labelled once for the whole row (see the dashboard page).
+ */
+export function KpiTile({ icon: Icon, tone, label, value, detail, trend, href }: KpiTileProps) {
   const TrendIcon = trend === 'down' ? TrendingDown : TrendingUp;
 
   return (
@@ -44,17 +45,14 @@ export function KpiTile({ icon: Icon, tone, label, value, detail, trend, href, d
         </Link>
       </div>
 
-      <p className="font-wide text-[2.5rem] leading-none font-semibold tracking-tight text-mist-50 tabular-nums">
+      <p className="text-[2.6rem] leading-none font-semibold tracking-tight whitespace-nowrap text-mist-50 tabular-nums">
         {value}
       </p>
 
-      <div className="flex items-center justify-between gap-3">
-        <p className="flex items-center gap-1.5 text-xs text-mist-300">
-          {trend && <TrendIcon aria-hidden="true" className="size-3.5 shrink-0" />}
-          {detail}
-        </p>
-        {demo && <StatusChip tone="demo">{ptBR.status.demo}</StatusChip>}
-      </div>
+      <p className="flex items-center gap-1.5 text-xs text-mist-300">
+        {trend && <TrendIcon aria-hidden="true" className="size-3.5 shrink-0" />}
+        {detail}
+      </p>
     </article>
   );
 }

@@ -41,7 +41,7 @@ export default async function DashboardPage() {
             {d.greeting(profile.firstName)}
           </h1>
         </div>
-        <p className="flex max-w-xl gap-3 rounded-panel border border-dashed border-ember-300/40 bg-ember-950/40 px-4 py-3 text-sm leading-6 text-mist-100">
+        <p className="flex max-w-xl flex-col items-start gap-2 rounded-panel border border-dashed border-ember-300/40 bg-ember-950/40 px-4 py-3 text-sm leading-6 text-mist-100 sm:flex-row sm:gap-3">
           <span className="mt-0.5 shrink-0">
             <StatusChip tone="demo">{ptBR.status.demo}</StatusChip>
           </span>
@@ -49,47 +49,51 @@ export default async function DashboardPage() {
         </p>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiTile
-          icon={Bot}
-          tone="magnus"
-          label={k.agents.label}
-          value={String(demoKpis.agents.value)}
-          detail={k.agents.delta(demoKpis.agents.delta)}
-          trend={demoKpis.agents.trend}
-          href="/agentes"
-          demo
-        />
-        <KpiTile
-          icon={ListChecks}
-          tone="teal"
-          label={k.tasksDone.label}
-          value={demoKpis.tasksDone.value.toLocaleString('pt-BR')}
-          detail={k.tasksDone.delta(demoKpis.tasksDone.delta)}
-          trend={demoKpis.tasksDone.trend}
-          href="/tarefas"
-          demo
-        />
-        <KpiTile
-          icon={ShieldCheck}
-          tone="ember"
-          label={k.awaitingYou.label}
-          value={String(demoKpis.awaitingYou.value)}
-          detail={k.awaitingYou.detail}
-          href="/aprovacoes"
-          demo
-        />
-        <KpiTile
-          icon={Wallet}
-          tone="violet"
-          label={k.aiCost.label}
-          value={currency.format(demoKpis.aiCost.value)}
-          detail={k.aiCost.delta(demoKpis.aiCost.delta)}
-          trend={demoKpis.aiCost.trend}
-          href="/relatorios"
-          demo
-        />
-      </div>
+      <section aria-labelledby="indicadores-title" className="flex flex-col gap-3">
+        <div className="flex items-center gap-2.5">
+          <h2 id="indicadores-title" className="text-sm font-medium text-mist-300">
+            {d.kpiCaption}
+          </h2>
+          <StatusChip tone="demo">{ptBR.status.demo}</StatusChip>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <KpiTile
+            icon={Bot}
+            tone="magnus"
+            label={k.agents.label}
+            value={String(demoKpis.agents.value)}
+            detail={k.agents.delta(demoKpis.agents.delta)}
+            trend={demoKpis.agents.trend}
+            href="/agentes"
+          />
+          <KpiTile
+            icon={ListChecks}
+            tone="teal"
+            label={k.tasksDone.label}
+            value={demoKpis.tasksDone.value.toLocaleString('pt-BR')}
+            detail={k.tasksDone.delta(demoKpis.tasksDone.delta)}
+            trend={demoKpis.tasksDone.trend}
+            href="/tarefas"
+          />
+          <KpiTile
+            icon={ShieldCheck}
+            tone="ember"
+            label={k.awaitingYou.label}
+            value={String(demoKpis.awaitingYou.value)}
+            detail={k.awaitingYou.detail}
+            href="/aprovacoes"
+          />
+          <KpiTile
+            icon={Wallet}
+            tone="violet"
+            label={k.aiCost.label}
+            value={currency.format(demoKpis.aiCost.value)}
+            detail={k.aiCost.delta(demoKpis.aiCost.delta)}
+            trend={demoKpis.aiCost.trend}
+            href="/relatorios"
+          />
+        </div>
+      </section>
 
       <div className="grid gap-4 xl:grid-cols-12">
         <RunsPanel className="xl:col-span-8" labels={{ '7d': lastDays(7, today), '30d': lastDays(30, today) }} />
@@ -101,10 +105,9 @@ export default async function DashboardPage() {
         <AssistantCard className="xl:col-span-5" />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-12">
-        <OperationsTimeline className="xl:col-span-7" />
-        <ActivityPanel className="xl:col-span-5" />
-      </div>
+      <OperationsTimeline />
+
+      <ActivityPanel />
 
       <PlatformStatus />
     </div>

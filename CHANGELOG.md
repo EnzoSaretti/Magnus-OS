@@ -23,7 +23,13 @@ Formato: data · fase · o que foi entregue · como foi verificado. Decisões ar
 
 **Verificado**
 
-- Typecheck, 76 testes (4 novos da matemática dos gráficos) e build.
+- Typecheck, 77 testes (5 novos da matemática dos gráficos) e build.
+- Revisão visual com a sessão do fundador em 1440 px, tablet (768 px) e celular (375 px); corrigidos:
+  selo de demonstração repetido em cada indicador (agora um selo para a linha), valor "US$ 214,30"
+  quase estourando o cartão, rótulos de data sobrepostos no fim do gráfico (`xLabelIndexes`, testado),
+  linha de operação vazia de madrugada (virou janela móvel de 24 h), cartão esticado com espaço sobrando
+  (linha em largura total e atividade em cartões lado a lado) e aviso apertado no celular. Menu da conta
+  testado (nome, e-mail, Sair).
 - Paleta dos gráficos aprovada pelo validador (luminosidade, croma, daltonismo, contraste).
 
 **Teste do fundador (F1.4a):** cadastro, confirmação e login funcionando com a conta real.

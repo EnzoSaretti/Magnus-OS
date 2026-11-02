@@ -64,6 +64,24 @@ export function monotonePath(points: readonly Point[]): string {
   return path;
 }
 
+/**
+ * Which x-axis points get a label: every `every`-th point, always the last one,
+ * and never two labels closer than half a step (the last replaces its neighbour).
+ */
+export function xLabelIndexes(count: number, every: number): number[] {
+  if (count <= 0) return [];
+  const step = Math.max(1, every);
+  const indexes: number[] = [];
+  for (let i = 0; i < count; i += step) indexes.push(i);
+  const last = count - 1;
+  const previous = indexes[indexes.length - 1]!;
+  if (previous !== last) {
+    if (last - previous < step / 2 && indexes.length > 1) indexes.pop();
+    indexes.push(last);
+  }
+  return indexes;
+}
+
 /** Spreads label positions apart so direct labels never overlap (min gap in px). */
 export function separate(positions: readonly number[], minGap: number): number[] {
   const order = positions.map((value, index) => ({ value, index })).sort((a, b) => a.value - b.value);

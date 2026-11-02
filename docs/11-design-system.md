@@ -51,9 +51,10 @@ alta em rótulos.
 Topo: organização ativa (F1.5) à esquerda; ambiente e menu da conta (avatar com iniciais, nome, Sair)
 à direita.
 
-Ordem do Painel: saudação com a data → aviso de demonstração → 4 indicadores → execuções (linha) e
-tarefas do mês (rosca) → "Aguardando você" e assistente → linha de operação de 24 h e atividade dos
-agentes → estado da plataforma (dado real).
+Ordem do Painel: saudação com a data → aviso de demonstração → 4 indicadores (com um único selo para
+a linha) → execuções (linha) e tarefas do mês (rosca) → "Aguardando você" e assistente → últimas 24 h de
+operação (largura total, janela móvel com o "agora" na borda direita) → atividade dos agentes (cartões
+lado a lado) → estado da plataforma (dado real).
 
 ## Componentes
 
@@ -69,15 +70,17 @@ agentes → estado da plataforma (dado real).
 
 - Ficam em um único arquivo: `apps/web/src/content/demo/dashboard.ts`, com cabeçalho explicando que não
   vêm de nenhuma organização.
-- Todo cartão alimentado por ele mostra o selo **Demonstração**, e o Painel abre com um aviso.
+- Todo cartão alimentado por ele mostra o selo **Demonstração** (os 4 indicadores compartilham um selo
+  no título da linha), e o Painel abre com um aviso.
 - Ações nunca são simuladas: "Revisar" e as sugestões do assistente levam às telas reais dos módulos; o
   campo do assistente fica desabilitado com "O assistente chega na Fase 2".
 - Cada export é substituído por consulta real quando o módulo correspondente entra (Fase 2+).
 
 ## Movimento
 
-Um momento orquestrado: a faixa da linha de operação preenche até o agora. Fora isso, só movimento em
-resposta a ação (menus, destaque de fatias). `prefers-reduced-motion` desliga animações.
+Sem animação automática além do cursor do "agora", que avança com o relógio. Movimento só em resposta
+a ação (menus, gaveta, destaque de fatias e dica do gráfico). `prefers-reduced-motion` desliga
+animações.
 
 ## Texto
 

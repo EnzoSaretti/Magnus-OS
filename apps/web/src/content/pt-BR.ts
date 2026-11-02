@@ -111,6 +111,7 @@ export const ptBR = {
   dashboard: {
     title: 'Painel',
     greeting: (firstName: string | null) => (firstName ? `Olá, ${firstName}` : 'Olá'),
+    kpiCaption: 'Indicadores do mês',
     demoNotice:
       'Os indicadores abaixo são dados de demonstração. Eles mostram como o painel vai funcionar quando os agentes entrarem em operação, na Fase 2; nenhum número representa a sua empresa.',
     kpis: {
@@ -164,7 +165,7 @@ export const ptBR = {
       inputPlaceholder: 'O assistente chega na Fase 2',
     },
     timeline: {
-      title: 'Linha de operação de hoje',
+      title: 'Últimas 24 horas de operação',
       now: 'agora',
       runs: 'Execuções',
       approvals: 'Pedidos de aprovação',

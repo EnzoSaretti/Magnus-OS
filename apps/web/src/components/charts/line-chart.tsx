@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { monotonePath, niceMax, separate } from './scales';
+import { monotonePath, niceMax, separate, xLabelIndexes } from './scales';
 import { useElementWidth } from './use-element-width';
 
 export interface LineSeries {
@@ -42,6 +42,7 @@ export function LineChart({ series, labels, ariaLabel, height = 248, formatValue
   const x = (i: number) => PAD.left + (count <= 1 ? innerWidth / 2 : (i * innerWidth) / (count - 1));
   const y = (v: number) => PAD.top + innerHeight - (v / max) * innerHeight;
   const labelEvery = Math.max(1, Math.ceil(count / Math.max(1, Math.floor(innerWidth / 64))));
+  const shownLabels = xLabelIndexes(count, labelEvery);
 
   const endLabelY = separate(
     series.map((s) => y(s.values[s.values.length - 1] ?? 0)),
@@ -100,13 +101,11 @@ export function LineChart({ series, labels, ariaLabel, height = 248, formatValue
             </g>
           ))}
 
-          {labels.map((label, i) =>
-            i % labelEvery === 0 || i === count - 1 ? (
-              <text key={label} x={x(i)} y={height - 8} textAnchor="middle" className="fill-graphite-500 text-[11px]">
-                {label}
-              </text>
-            ) : null,
-          )}
+          {shownLabels.map((i) => (
+            <text key={labels[i]} x={x(i)} y={height - 8} textAnchor="middle" className="fill-graphite-500 text-[11px]">
+              {labels[i]}
+            </text>
+          ))}
 
           {series[0] && (
             <path

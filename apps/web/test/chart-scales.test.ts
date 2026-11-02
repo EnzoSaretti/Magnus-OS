@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { monotonePath, niceMax, separate } from '../src/components/charts/scales.ts';
+import { monotonePath, niceMax, separate, xLabelIndexes } from '../src/components/charts/scales.ts';
 
 describe('niceMax', () => {
   test('rounds up to 1, 2, 2.5 or 5 × 10^n', () => {
@@ -34,6 +34,17 @@ describe('monotonePath', () => {
   test('handles empty and single-point series', () => {
     assert.equal(monotonePath([]), '');
     assert.equal(monotonePath([{ x: 1, y: 2 }]), 'M1,2');
+  });
+});
+
+describe('xLabelIndexes', () => {
+  test('labels every step and always the last point, never two crowded together', () => {
+    assert.deepEqual(xLabelIndexes(30, 4), [0, 4, 8, 12, 16, 20, 24, 29]);
+    assert.deepEqual(xLabelIndexes(29, 4), [0, 4, 8, 12, 16, 20, 24, 28]);
+    assert.deepEqual(xLabelIndexes(30, 7), [0, 7, 14, 21, 29]);
+    assert.deepEqual(xLabelIndexes(7, 1), [0, 1, 2, 3, 4, 5, 6]);
+    assert.deepEqual(xLabelIndexes(1, 3), [0]);
+    assert.deepEqual(xLabelIndexes(0, 3), []);
   });
 });
 

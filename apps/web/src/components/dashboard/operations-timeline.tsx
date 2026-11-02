@@ -5,14 +5,18 @@ import { demoTodayEvents } from '@/content/demo/dashboard';
 import { ptBR } from '@/content/pt-BR';
 import { Panel } from './panel';
 
-const HOURS = Array.from({ length: 25 }, (_, hour) => hour);
-const MINUTES_PER_DAY = 24 * 60;
+const HOUR = 3_600_000;
+const WINDOW = 24 * HOUR;
 const timeFormat = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
+function position(time: number, start: number): number {
+  return ((time - start) / WINDOW) * 100;
+}
+
 /**
- * Today's operations on a 24-hour scale. The "now" cursor is the browser's real
- * clock; marks up to now come from demonstration data until phase 2. Rendered
- * after mount only, so server and client markup never disagree about the time.
+ * The last 24 hours of operation on a rolling scale, "now" at the right edge.
+ * The clock is the browser's; marks come from demonstration data until phase 2.
+ * Rendered after mount only, so server and client markup never disagree about the time.
  */
 export function OperationsTimeline({ className }: { className?: string }) {
   const [now, setNow] = useState<Date | null>(null);
@@ -25,9 +29,27 @@ export function OperationsTimeline({ className }: { className?: string }) {
   }, []);
 
   const t = ptBR.dashboard.timeline;
+  const end = now?.getTime() ?? 0;
+  const start = end - WINDOW;
+
+  const hours: { time: number; hour: number }[] = [];
+  if (now) {
+    const first = new Date(start);
+    first.setMinutes(0, 0, 0);
+    for (let time = first.getTime() + HOUR; time <= end; time += HOUR) {
+      hours.push({ time, hour: new Date(time).getHours() });
+    }
+  }
+
+  // Each demo event at its most recent occurrence within the window.
+  const midnight = now ? new Date(now).setHours(0, 0, 0, 0) : 0;
   const nowMinute = now ? now.getHours() * 60 + now.getMinutes() : 0;
-  const elapsed = (nowMinute / MINUTES_PER_DAY) * 100;
-  const events = now ? demoTodayEvents.filter((event) => event.minute <= nowMinute) : [];
+  const events = now
+    ? demoTodayEvents.map((event) => ({
+        ...event,
+        time: midnight + event.minute * 60_000 - (event.minute > nowMinute ? 24 * HOUR : 0),
+      }))
+    : [];
   const runs = events.filter((event) => event.kind === 'run').length;
   const approvals = events.length - runs;
 
@@ -44,18 +66,15 @@ export function OperationsTimeline({ className }: { className?: string }) {
       }
     >
       <div className="relative h-24 overflow-hidden rounded-control bg-onyx" aria-hidden="true">
-        <div
-          className="absolute inset-y-0 left-0 bg-linear-to-r from-magnus-950/70 via-magnus-950 to-magnus-700/35 transition-[width] duration-1000 ease-out-quint"
-          style={{ width: `${elapsed}%` }}
-        />
-        {HOURS.map((hour) => (
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-magnus-950/60 to-magnus-700/30" />
+        {hours.map(({ time, hour }) => (
           <span
-            key={hour}
+            key={time}
             className={[
               'absolute bottom-0 w-px',
               hour % 6 === 0 ? 'h-full bg-graphite-700' : hour % 3 === 0 ? 'h-1/2 bg-graphite-700' : 'h-1/4 bg-graphite-800',
             ].join(' ')}
-            style={{ left: `${(hour / 24) * 100}%` }}
+            style={{ left: `${position(time, start)}%` }}
           />
         ))}
         {events.map((event) => (
@@ -63,31 +82,37 @@ export function OperationsTimeline({ className }: { className?: string }) {
             key={`${event.kind}-${event.minute}`}
             className={[
               'absolute size-2.5 -translate-x-1/2 rounded-full ring-2 ring-onyx',
-              event.kind === 'run' ? 'top-[38%] bg-chart-1' : 'top-[18%] bg-chart-3',
+              event.kind === 'run' ? 'top-[40%] bg-chart-1' : 'top-[16%] bg-chart-3',
             ].join(' ')}
-            style={{ left: `${(event.minute / MINUTES_PER_DAY) * 100}%` }}
+            style={{ left: `${position(event.time, start)}%` }}
           />
         ))}
         {now && (
-          <span className="absolute inset-y-0 w-0.5 bg-magnus-300" style={{ left: `calc(${elapsed}% - 1px)` }}>
+          <span className="absolute inset-y-0 right-0 w-0.5 bg-magnus-300">
             <span className="absolute -top-px left-1/2 size-2 -translate-x-1/2 rounded-full bg-magnus-300" />
           </span>
         )}
       </div>
 
       <div className="relative mt-2 h-4 text-xs tabular-nums text-graphite-500" aria-hidden="true">
-        {HOURS.filter((hour) => hour % 3 === 0).map((hour) => (
-          <span
-            key={hour}
-            className={[
-              'absolute -translate-x-1/2 first:translate-x-0 last:-translate-x-full',
-              hour % 6 === 0 ? '' : 'hidden sm:inline',
-            ].join(' ')}
-            style={{ left: `${(hour / 24) * 100}%` }}
-          >
-            {String(hour).padStart(2, '0')}h
-          </span>
-        ))}
+        {hours
+          .filter(({ hour }) => hour % 3 === 0)
+          .map(({ time, hour }) => {
+            const left = position(time, start);
+            return (
+              <span
+                key={time}
+                className={[
+                  'absolute',
+                  left < 4 ? '' : left > 96 ? '-translate-x-full' : '-translate-x-1/2',
+                  hour % 6 === 0 ? '' : 'hidden sm:inline',
+                ].join(' ')}
+                style={{ left: `${left}%` }}
+              >
+                {String(hour).padStart(2, '0')}h
+              </span>
+            );
+          })}
       </div>
 
       <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-mist-300">
