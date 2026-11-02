@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="magnus-bar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff5b2e" />
+      <stop offset="1" stop-color="#7352ff" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="#050407" />
+  <rect x="7" y="7" width="4" height="18" rx="2" fill="url(#magnus-bar)" />
+  <path d="M15 25V7l5 9 5-9v18" fill="none" stroke="#f0eef6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+</svg>

@@ -21,3 +21,37 @@ export function safeNextPath(value: unknown, fallback: string = DEFAULT_AFTER_SI
   if (matchesPath(value.split(/[?#]/)[0] ?? '', GUEST_ONLY_PATHS)) return fallback;
   return value;
 }
+
+export type RouteDecision = { kind: 'continue' } | { kind: 'redirect'; to: string };
+
+/**
+ * Optimistic routing done by the proxy for every request.
+ * `to` is a same-site path (with query string) to redirect to.
+ */
+export function decideRoute(pathname: string, search: URLSearchParams, signedIn: boolean): RouteDecision {
+  // Supabase falls back to the Site URL (/) when an e-mail link's redirect is not
+  // allowed: forward the one-time code (or the error) to the auth routes.
+  if (pathname === '/') {
+    const code = search.get('code');
+    if (code) {
+      const params = new URLSearchParams({ code, next: DEFAULT_AFTER_SIGN_IN });
+      return { kind: 'redirect', to: `/auth/callback?${params}` };
+    }
+    if (search.has('error_code') || search.has('error')) {
+      return { kind: 'redirect', to: '/entrar?erro=link' };
+    }
+  }
+
+  if (!signedIn && !matchesPath(pathname, PUBLIC_PATHS)) {
+    if (pathname === '/') return { kind: 'redirect', to: '/entrar' };
+    const query = search.toString();
+    const params = new URLSearchParams({ next: safeNextPath(query ? `${pathname}?${query}` : pathname) });
+    return { kind: 'redirect', to: `/entrar?${params}` };
+  }
+
+  if (signedIn && matchesPath(pathname, GUEST_ONLY_PATHS)) {
+    return { kind: 'redirect', to: safeNextPath(search.get('next')) };
+  }
+
+  return { kind: 'continue' };
+}

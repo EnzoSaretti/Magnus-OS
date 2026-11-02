@@ -28,10 +28,19 @@ Formato: data · fase · o que foi entregue · como foi verificado. Decisões ar
   mostra os erros de validação sem chamar o Supabase; `/auth/callback` sem código mostra "O link
   expirou"; cadastro no celular; sem erros no servidor.
 
-**Não verificado**
+**Primeiro teste do fundador (correções)**
 
-- Cadastro e login com uma conta real (envio e clique no e-mail de confirmação): por regra, eu não
-  digito credenciais; o teste é do fundador.
+- Cadastro real funcionou e a conta foi confirmada, mas o link do e-mail foi aberto em outro aparelho:
+  o retorno para `localhost:3000` nunca chegou ao app (diagnóstico pelos logs do Supabase Auth).
+- Textos de "Confira seu e-mail", "Entrar sem senha" e do erro de link passam a dizer explicitamente
+  para abrir o link neste computador, no mesmo navegador, e o que fazer se a conta já foi confirmada.
+- O proxy encaminha links que o Supabase devolve para a raiz do site (`/?code=…` → `/auth/callback`;
+  `/?error_code=…` → aviso de link inválido). Regras de roteamento extraídas para `decideRoute()` com
+  testes.
+- `/[modulo]` aceita só os 7 módulos: `/favicon.ico` deixava de ser 404 e virava redirecionamento
+  para o login. Ícone do app (`app/icon.svg`).
+- Verificado: 72 testes, build, e no navegador `/?code=…` → `/auth/callback` → aviso, `/favicon.ico`
+  → 404, `/agentes` sem sessão → login.
 
 ## 2026-11-02 · Fase 1.3 — App web e design system
 

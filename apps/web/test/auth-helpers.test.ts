@@ -1,6 +1,6 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { matchesPath, PUBLIC_PATHS, safeNextPath } from '../src/lib/auth/redirects.ts';
+import { decideRoute, matchesPath, PUBLIC_PATHS, safeNextPath } from '../src/lib/auth/redirects.ts';
 import { authErrorKey } from '../src/lib/auth/errors.ts';
 
 describe('safeNextPath (post-login redirect target)', () => {
@@ -42,6 +42,37 @@ describe('public routes', () => {
     assert.ok(!matchesPath('/entrarx', PUBLIC_PATHS));
     assert.ok(!matchesPath('/painel', PUBLIC_PATHS));
     assert.ok(!matchesPath('/', PUBLIC_PATHS));
+  });
+});
+
+describe('decideRoute (proxy routing)', () => {
+  const route = (path: string, signedIn: boolean) => {
+    const url = new URL(path, 'http://localhost:3000');
+    return decideRoute(url.pathname, url.searchParams, signedIn);
+  };
+
+  test('visitors are sent to sign-in, keeping where they were going', () => {
+    assert.deepEqual(route('/agentes?x=1', false), { kind: 'redirect', to: '/entrar?next=%2Fagentes%3Fx%3D1' });
+    assert.deepEqual(route('/', false), { kind: 'redirect', to: '/entrar' });
+    assert.deepEqual(route('/cadastro', false), { kind: 'continue' });
+    assert.deepEqual(route('/auth/callback?code=abc', false), { kind: 'continue' });
+  });
+
+  test('signed-in users skip the sign-in screens, only to safe targets', () => {
+    assert.deepEqual(route('/entrar?next=/tarefas', true), { kind: 'redirect', to: '/tarefas' });
+    assert.deepEqual(route('/entrar?next=https://evil.example', true), { kind: 'redirect', to: '/painel' });
+    assert.deepEqual(route('/painel', true), { kind: 'continue' });
+  });
+
+  test('e-mail links that fell back to the site root still complete sign-in', () => {
+    assert.deepEqual(route('/?code=abc123', false), {
+      kind: 'redirect',
+      to: '/auth/callback?code=abc123&next=%2Fpainel',
+    });
+    assert.deepEqual(route('/?error=access_denied&error_code=otp_expired', false), {
+      kind: 'redirect',
+      to: '/entrar?erro=link',
+    });
   });
 });
 

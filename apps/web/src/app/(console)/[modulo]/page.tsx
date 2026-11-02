@@ -2,11 +2,19 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { StatusChip } from '@magnus/ui';
-import { MODULES, isModuleId } from '@/content/modules';
+import { MODULE_IDS, MODULES, isModuleId } from '@/content/modules';
 import { ptBR } from '@/content/pt-BR';
 
 interface ModulePageProps {
   params: Promise<{ modulo: string }>;
+}
+
+// Only the known modules exist; any other path (e.g. /favicon.ico) is a 404
+// before the console layout runs, instead of a redirect to sign-in.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return MODULE_IDS.map((modulo) => ({ modulo }));
 }
 
 export async function generateMetadata({ params }: ModulePageProps): Promise<Metadata> {

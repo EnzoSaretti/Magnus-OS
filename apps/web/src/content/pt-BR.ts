@@ -36,12 +36,14 @@ export const ptBR = {
       noAccount: 'Ainda não tem conta?',
       createAccount: 'Criar conta',
       magicLinkTitle: 'Entrar sem senha',
-      magicLinkHelp: 'Enviamos um link de acesso para o seu e-mail. Abra-o neste mesmo navegador.',
+      magicLinkHelp:
+        'Enviamos um link de acesso para o seu e-mail. Abra-o neste computador, no mesmo navegador em que você está agora.',
       magicLinkSubmit: 'Enviar link de acesso',
       magicLinkSubmitting: 'Enviando…',
       magicLinkSent: 'Se existir uma conta com esse e-mail, o link de acesso chega em instantes.',
       google: 'Entrar com Google',
-      linkError: 'O link expirou ou já foi usado. Peça um novo.',
+      linkError:
+        'O link não funcionou. Ele vale uma única vez e precisa ser aberto no mesmo navegador em que foi pedido. Se sua conta já foi confirmada, entre com e-mail e senha; se não, peça um novo link.',
       googleError: 'Não foi possível entrar com Google agora. Tente de novo ou use e-mail e senha.',
     },
     signUp: {
@@ -57,7 +59,7 @@ export const ptBR = {
     },
     checkEmail: {
       title: 'Confira seu e-mail',
-      body: 'Enviamos um link de confirmação. Abra-o neste mesmo navegador para ativar sua conta.',
+      body: 'Enviamos um link de confirmação. Abra o e-mail neste computador e clique no link, no mesmo navegador em que você criou a conta. Depois disso, é só entrar.',
       back: 'Voltar para entrar',
     },
     signOut: 'Sair',
