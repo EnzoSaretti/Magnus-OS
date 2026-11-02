@@ -7,8 +7,8 @@
 ## A. Aprovadas pelo fundador em 2026-11-01 ✅
 
 Executado: D-01 (projeto em `C:\dev\magnus-os`; a cópia antiga no OneDrive não foi apagada), D-03,
-D-04, D-10 e D-11 registrados como ADRs aceitos. D-02: Git local inicializado; a criação do repositório
-no GitHub depende de você (o GitHub CLI não está instalado nesta máquina).
+D-04, D-10 e D-11 registrados como ADRs aceitos. D-02: repositório privado [EnzoSaretti/Magnus-OS](https://github.com/EnzoSaretti/Magnus-OS) criado
+pelo fundador e `main` enviada; proteção da `main` pendente (configurar no GitHub).
 
 | ID | Decisão | Recomendação | Por quê | Reversível? |
 |---|---|---|---|---|

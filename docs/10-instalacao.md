@@ -48,7 +48,7 @@ commit de arquivos `.env*` com valores reais.
 ## Próximas etapas de setup
 
 1. ✅ Projeto fora do OneDrive (D-01) e Git inicializado.
-2. Repositório privado no GitHub + `git push` (D-02 — aguarda você criar o repositório).
+2. ✅ Repositório privado no GitHub (`EnzoSaretti/Magnus-OS`) e primeiro push (D-02).
 3. Proteger `main` no GitHub (exigir PR e CI verde).
 4. Criar projeto Supabase de staging em sa-east-1 (D-04) e instalar a Supabase CLI para aplicar
    migrações (`supabase db push`) e gerar tipos.

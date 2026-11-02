@@ -27,7 +27,7 @@ Formato: data · fase · o que foi entregue · como foi verificado. Decisões ar
 
 - D-03, D-04, D-10, D-11 aprovados: ADRs 0001, 0002, 0005 e 0006 marcados como **Aceita**.
 - D-01: projeto copiado para `C:\dev\magnus-os` (a cópia no OneDrive permanece até confirmação).
-- D-02: repositório Git local (`main`), `.gitattributes` normalizando finais de linha em LF.
+- D-02: repositório Git (`main`) enviado para o GitHub privado `EnzoSaretti/Magnus-OS`; `.gitattributes` normalizando finais de linha em LF.
 - CI no GitHub Actions: `npm ci`, `npm run check` e varredura de segredos (gitleaks v8.30.1) em todo o
   histórico.
 - Fase 1 dividida em incrementos F1.1–F1.6 no [roadmap](docs/08-roadmap.md); nova decisão D-16
@@ -37,7 +37,7 @@ Formato: data · fase · o que foi entregue · como foi verificado. Decisões ar
 
 - Cópia byte a byte idêntica à origem (`diff -r`); `npm ci && npm run check` no novo local: 51 testes
   passando, typecheck limpo.
-- CI ainda não executado: depende do repositório no GitHub.
+- Push para o GitHub concluído; resultado do primeiro CI a confirmar na aba Actions.
 
 ## 2026-11-01 · Fase 0 — Fundação
 
