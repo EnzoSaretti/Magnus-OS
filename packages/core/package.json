@@ -1,0 +1,11 @@
+{
+  "name": "@magnus/core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pure domain rules: tenancy roles, permissions and agent action policy. No runtime dependencies.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

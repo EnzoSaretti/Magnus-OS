@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Builds and caches
+.next/
+out/
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Hosting / tooling state
+.vercel/
+supabase/.branches/
+supabase/.temp/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json

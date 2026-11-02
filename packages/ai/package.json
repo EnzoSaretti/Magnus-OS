@@ -1,0 +1,11 @@
+{
+  "name": "@magnus/ai",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Provider-agnostic LLM contract, model catalog and cost estimation. Vendor adapters live in src/adapters/.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
