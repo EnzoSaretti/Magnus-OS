@@ -1,0 +1,85 @@
+/*
+ * MAGNUS design tokens (Tailwind CSS v4).
+ *
+ * Color carries meaning, never decoration:
+ *   magnus (purple)  — agents and the platform at work
+ *   ember (red-orange) — a human decision is needed (approvals, sensitive actions)
+ *   graphite / onyx — the structure everything sits on
+ *
+ * Import after `tailwindcss` in the app stylesheet.
+ */
+
+@theme {
+  --color-onyx: #050407;
+  --color-graphite-950: #0b0a0f;
+  --color-graphite-900: #131218;
+  --color-graphite-850: #18161f;
+  --color-graphite-800: #1f1d28;
+  --color-graphite-700: #2b2935;
+  --color-graphite-600: #3a3746;
+  --color-graphite-500: #6f6b7e;
+
+  --color-mist-300: #aaa6b9;
+  --color-mist-100: #dcd9e6;
+  --color-mist-50: #f0eef6;
+
+  --color-magnus-700: #4a28d6;
+  --color-magnus-600: #5b36f2;
+  --color-magnus-500: #7352ff;
+  --color-magnus-300: #b6a6ff;
+  --color-magnus-950: #17112f;
+
+  --color-ember-600: #e6421a;
+  --color-ember-500: #ff5b2e;
+  --color-ember-300: #ffa07f;
+  --color-ember-950: #2a1009;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-panel: 14px;
+  --radius-control: 9px;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: var(--color-graphite-950);
+    color: var(--color-mist-100);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-magnus-600);
+    color: var(--color-mist-50);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-magnus-300);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@utility font-wide {
+  font-variation-settings: 'wdth' 125;
+}
+
+@utility font-condensed {
+  font-variation-settings: 'wdth' 88;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -9,13 +9,16 @@
     "node": ">=24"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
+    "dev": "npm run dev -w @magnus/web",
+    "build": "npm run build -w @magnus/web",
     "test": "node --test \"packages/*/test/**/*.test.ts\" \"supabase/tests/**/*.test.ts\"",
     "test:unit": "node --test \"packages/*/test/**/*.test.ts\"",
     "test:db": "node --test \"supabase/tests/**/*.test.ts\"",
-    "typecheck": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p apps/web/tsconfig.json",
     "check": "npm run typecheck && npm test"
   },
   "devDependencies": {

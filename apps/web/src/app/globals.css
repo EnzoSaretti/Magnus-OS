@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@import '@magnus/ui/theme.css';
+
+/* Scan the shared design-system components for class names. */
+@source '../../../../packages/ui/src';
+
+/* Mobile navigation drawer (native <dialog>): slides in from the left when opened. */
+.mobile-drawer::backdrop {
+  background: rgb(5 4 7 / 0.7);
+}
+
+.mobile-drawer[open] {
+  animation: drawer-in 220ms var(--ease-out-quint);
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}

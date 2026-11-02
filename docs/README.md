@@ -13,6 +13,7 @@
 | 08 | [Roadmap](08-roadmap.md) | Fases com critérios de pronto; o que aguarda validação comercial. |
 | 09 | [Decisões pendentes](09-decisoes-pendentes.md) | **O que precisa da aprovação do fundador**, com recomendações. |
 | 10 | [Instalação](10-instalacao.md) | Requisitos e comandos para validar o projeto. |
+| 11 | [Design system](11-design-system.md) | Cores com significado, tipografia, layout responsivo, texto e acessibilidade. |
 | — | [ADRs](adr/README.md) | Decisões arquiteturais registradas. |
 
 Registro de entregas: [CHANGELOG.md](../CHANGELOG.md).

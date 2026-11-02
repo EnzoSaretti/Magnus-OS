@@ -3,6 +3,36 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-02 · Fase 1.3 — App web e design system
+
+**Entregue**
+
+- D-12 aprovada: interface em PT-BR, strings centralizadas em `apps/web/src/content/pt-BR.ts`.
+- `apps/web` (Next.js 16.4, React 19.3, Tailwind 4.3): shell do centro de controle responsivo — trilho
+  com rótulos no desktop, ícones no tablet, gaveta (`<dialog>` nativo) no celular; link "Pular para o
+  conteúdo"; cabeçalhos de segurança básicos; páginas `/painel` e uma tela por módulo
+  (`/agentes`, `/tarefas`, `/aprovacoes`, `/memoria`, `/relatorios`, `/integracoes`, `/configuracoes`)
+  geradas estaticamente; 404 em PT-BR.
+- Painel sem dados fictícios: linha de operação de 24 h com o horário real, "Aguardando você" e
+  "Agentes" em estado vazio, "Estado da plataforma" com o status real de cada capacidade.
+- `packages/ui`: tokens (cor com significado — roxo para agentes, brasa para decisão humana; Archivo
+  variável em duas larguras), `StatusChip`, `Wordmark` provisória.
+- [docs/11-design-system.md](docs/11-design-system.md); CI passa a fazer o build do app web;
+  `npm run dev`/`build` na raiz; `NEXT_PUBLIC_MAGNUS_ENV` no `.env.example`.
+
+**Verificado**
+
+- `npm run build`: compilação e checagem de tipos do Next (TypeScript 7) sem erros; 11 páginas
+  estáticas.
+- `npm run check`: typecheck dos pacotes e do app web (também sem os arquivos gerados pelo Next, como
+  no CI) e 63 testes passando.
+- Conferência visual no navegador em desktop (1280/1440 px), tablet (768 px) e celular (375 px), menu
+  móvel aberto e fechado com Esc, sem erros no console.
+
+**Não feito**
+
+- Login e dados reais (F1.4); logotipo oficial (D-13); testes E2E de interface (F1.6).
+
 ## 2026-11-02 · Fase 1.1 — Supabase de staging
 
 **Entregue**

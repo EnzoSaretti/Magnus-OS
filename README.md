@@ -4,20 +4,23 @@
 especializados, memória empresarial, tarefas com aprovação humana e um centro de controle da operação,
 com isolamento total entre empresas.
 
-> **Status: Fase 0 concluída, Fase 1 em andamento.** Arquitetura aprovada (bloco A), schema multiempresa com
-> RLS testado e regras de domínio dos agentes. Ainda não há interface. Veja o que precisa de decisão em
+> **Status: Fase 1 em andamento.** Schema multiempresa com RLS no staging (Supabase, São Paulo),
+> convites, regras de domínio dos agentes e a prévia da interface do centro de controle (ainda sem
+> login e sem dados). Veja o que precisa de decisão em
 > [docs/09-decisoes-pendentes.md](docs/09-decisoes-pendentes.md).
 
 ## Estrutura
 
 ```text
+apps/web          Centro de controle (Next.js 16, Tailwind 4) — prévia sem dados
 packages/core     Regras de domínio puras: papéis, permissões, política de ações dos agentes
 packages/ai       Contrato agnóstico de provedores de IA, catálogo de modelos, estimativa de custo
+packages/ui       Design system: tokens e componentes compartilhados
 supabase/         Migrações SQL (fonte da verdade do schema) e testes de isolamento/RLS
-docs/             Visão, arquitetura, banco, segurança/LGPD, integrações, roadmap, ADRs
+docs/             Visão, arquitetura, banco, segurança/LGPD, integrações, roadmap, design, ADRs
 ```
 
-Planejados: `apps/web` (Next.js), `apps/worker`, `packages/{db,agents,memory,workflows,integrations,ui}` —
+Planejados: `apps/worker`, `packages/{db,agents,memory,workflows,integrations}` —
 ver [docs/03-arquitetura.md](docs/03-arquitetura.md).
 
 ## Validar
@@ -25,11 +28,17 @@ ver [docs/03-arquitetura.md](docs/03-arquitetura.md).
 Requer Node 24. Fora do OneDrive (ver [docs/10-instalacao.md](docs/10-instalacao.md)):
 
 ```bash
-npm install
+npm ci
 ```
 
 ```bash
 npm run check
+```
+
+Abrir a interface em http://localhost:3000:
+
+```bash
+npm run dev
 ```
 
 ## Documentação

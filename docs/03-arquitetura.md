@@ -63,7 +63,7 @@ flowchart LR
 
 | Componente | Responsabilidade | Status |
 |---|---|---|
-| `apps/web` | UI do centro de controle, autenticação (sessão via cookies), API síncrona (Route Handlers / Server Actions), enfileiramento de trabalho. **Nunca** executa agentes nem usa a chave secreta do Supabase. | Fase 1 |
+| `apps/web` | UI do centro de controle, autenticação (sessão via cookies), API síncrona (Route Handlers / Server Actions), enfileiramento de trabalho. **Nunca** executa agentes nem usa a chave secreta do Supabase. | **Iniciado** ✅ (F1.3: shell e telas, sem dados) |
 | `apps/worker` | Consome a fila: execuções de agentes, passos de workflow, relatórios agendados, ingestão da memória (extração, chunking, embeddings). | Fase 2 |
 | `packages/core` | Domínio puro, sem dependências: papéis e permissões, política de ações de agentes, limites de execução, tipos compartilhados. | **Iniciado** ✅ |
 | `packages/ai` | Contrato agnóstico de provedor (`ModelProvider`, `EmbeddingProvider`), catálogo de modelos e estimativa de custo; adaptadores (Anthropic primeiro). | **Contrato iniciado** ✅ |
@@ -72,7 +72,7 @@ flowchart LR
 | `packages/memory` | Ingestão de documentos, chunking, embeddings, busca híbrida (vetorial + texto) com escopo de organização. | Fase 3 |
 | `packages/workflows` | Definições versionadas de fluxos, gatilhos, motor de execução sobre a fila. | Fase 5 |
 | `packages/integrations` | SDK de conectores (manifesto, autenticação, ferramentas com classe de risco) e conectores reais. | Fase 6 |
-| `packages/ui` | Design system: tokens (cores, tipografia, movimento), componentes reutilizáveis. | Fase 1 |
+| `packages/ui` | Design system: tokens (cores, tipografia, movimento), componentes reutilizáveis. | **Iniciado** ✅ (tokens, `StatusChip`, `Wordmark`) |
 | `supabase/` | Migrações SQL (fonte da verdade do schema), políticas RLS, seed de demonstração, testes de banco. | **Iniciado** ✅ |
 
 ## 3. Fluxo de uma execução de agente
@@ -135,7 +135,7 @@ canal livre de mensagens entre agentes — todo intercâmbio é uma tarefa persi
 ```text
 magnus-os/
 ├── apps/
-│   ├── web/                    # Fase 1 — Next.js (centro de controle + API)
+│   ├── web/                    # ✅ F1.3 — Next.js (centro de controle + API)
 │   │   └── src/
 │   │       ├── app/            # rotas: (auth), (app)/[org]/dashboard, agents, tasks, memory, approvals, settings
 │   │       ├── components/     # componentes específicos de tela
@@ -151,7 +151,7 @@ magnus-os/
 │   ├── memory/                 # Fase 3 — ingestão e recuperação
 │   ├── workflows/              # Fase 5 — motor de fluxos
 │   ├── integrations/           # Fase 6 — SDK de conectores + conectores
-│   └── ui/                     # Fase 1 — design system
+│   └── ui/                     # ✅ F1.3 — design system (docs/11)
 ├── supabase/
 │   ├── migrations/    ✅       # SQL versionado (fonte da verdade)
 │   ├── tests/         ✅       # testes de RLS/isolamento (PGlite)
@@ -184,8 +184,9 @@ Versões abaixo consultadas no npm em 2026-11-01; serão confirmadas na instala�
 | `typescript` 7.0.x | Verificação de tipos | 0 ✅ | Compilador nativo; compatibilidade com Next.js 16 a confirmar na Fase 1. |
 | `@types/node` 24.x | Tipos do Node 24 (LTS) | 0 ✅ | |
 | `@electric-sql/pglite` 0.5.x | Postgres em WASM para testar migrações e RLS sem Docker | 0 ✅ | Só desenvolvimento/CI. |
-| `next` 16.x, `react`/`react-dom` 19.x | App web | 1 | |
-| `tailwindcss` 4.x | Estilos | 1 | |
+| `next` 16.x, `react`/`react-dom` 19.x | App web | 1 ✅ | Next 16 com Turbopack; build e checagem de tipos funcionam com o TypeScript 7. |
+| `tailwindcss` 4.x + `@tailwindcss/postcss` | Estilos (tokens em `packages/ui`) | 1 ✅ | |
+| `lucide-react` | Ícones de interface consistentes e acessíveis (importados um a um, sem peso morto) | 1 ✅ | Licença ISC. |
 | `@supabase/supabase-js` 2.x, `@supabase/ssr` | Cliente com sessão do usuário (RLS) | 1 | |
 | `zod` 4.x | Validação de entrada (forms, API, entradas de ferramentas) | 1 | |
 | `@radix-ui/*` (seletivo) | Primitivas acessíveis (dialog, menu, tooltip) | 1 | Apenas as usadas. |

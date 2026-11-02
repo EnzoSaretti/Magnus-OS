@@ -34,11 +34,14 @@ npm run check
 | `npm run test:unit` | Testes de `packages/*` (papéis, permissões, política de agentes, catálogo de modelos). |
 | `npm run test:db` | Sobe Postgres em memória (PGlite), aplica as migrações e testa isolamento e RLS. |
 | `npm test` | Todos os testes. |
+| `npm run dev` | Interface em modo de desenvolvimento em http://localhost:3000. |
+| `npm run build` | Build de produção do app web (também roda no CI). |
 
 ## Variáveis de ambiente
 
-Copie [`.env.example`](../.env.example) para `.env.local` quando o app web existir (Fase 1). Nunca faça
-commit de arquivos `.env*` com valores reais.
+Copie [`.env.example`](../.env.example) para `apps/web/.env.local` quando precisar mudar algo. Hoje só
+`NEXT_PUBLIC_MAGNUS_ENV` é lida (rótulo do ambiente na barra superior; padrão "Desenvolvimento").
+Nunca faça commit de arquivos `.env*` com valores reais.
 
 ## Integração contínua
 

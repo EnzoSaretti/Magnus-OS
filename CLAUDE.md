@@ -21,6 +21,10 @@ de mudanças grandes; o briefing do fundador está em `docs/briefing-original.md
 - Dependências com versão fixa (sem `^`), cada uma justificada em `docs/03-arquitetura.md`.
 - `packages/core` não importa nada. SDKs de fornecedores só em `packages/ai/src/adapters/` e
   `packages/integrations/src/connectors/`.
+- App web (`apps/web`): imports pelo alias `@/` sem extensão; toda string visível em
+  `src/content/pt-BR.ts`; status de módulos em `src/content/modules.ts` (deve refletir o roadmap real).
+  Siga `docs/11-design-system.md`: roxo = agentes trabalhando, brasa = decisão humana; nunca números
+  ilustrativos — estado vazio explica o que virá.
 
 ## Multiempresa (crítico)
 
@@ -48,5 +52,6 @@ aprovação humana — mudar isso exige novo ADR.
 
 ## Comandos
 
-- `npm run check` — typecheck + todos os testes
+- `npm run check` — typecheck (pacotes + app web) + todos os testes
 - `npm run test:unit` / `npm run test:db`
+- `npm run dev` / `npm run build` — app web

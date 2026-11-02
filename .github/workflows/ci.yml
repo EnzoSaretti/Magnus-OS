@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   check:
-    name: Typecheck and tests
+    name: Typecheck, tests and build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -25,6 +25,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - name: Build web app
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
 
   secrets:
     name: Secret scan
