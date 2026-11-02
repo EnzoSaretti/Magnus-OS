@@ -42,7 +42,7 @@ Dividida em incrementos, cada um com commit e verificação próprios:
 | Incremento | Conteúdo | Depende de | Status |
 |---|---|---|---|
 | **F1.1 Infraestrutura** | Repositório GitHub, CI, proteção da `main`; projeto Supabase de staging (sa-east-1) com migrações aplicadas; `supabase/config.toml`; tipos gerados. | D-02, conta Supabase | CI pronto; GitHub e Supabase pendentes |
-| **F1.2 Convites no banco** | Tabela `invitations` (hash do token, expiração, uso único, e-mail do convidado), `create_invitation`, `accept_invitation`, RLS e testes. | — | Em andamento |
+| **F1.2 Convites no banco** | Tabela `invitations` (hash do token, expiração, uso único, e-mail do convidado), `create_invitation`, `accept_invitation`, RLS e testes. | — | ✅ Concluído (2026-11-01) |
 | **F1.3 App web e design system** | `apps/web` (Next.js 16, Tailwind 4), `packages/ui` com tokens da identidade, layout de "centro de controle" responsivo (desktop/tablet/celular). | D-12, D-13 (logo pode entrar depois) | Planejado |
 | **F1.4 Autenticação** | Supabase Auth via `@supabase/ssr`: e-mail + senha, link mágico, Google; MFA (TOTP) obrigatório para owner/admin. | F1.1, F1.3 | Planejado |
 | **F1.5 Organizações na interface** | Onboarding (criar organização), seletor, membros e papéis, envio e aceite de convites, visualizador de auditoria. | F1.2, F1.4, provedor de e-mail transacional (D-16) | Planejado |

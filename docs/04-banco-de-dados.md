@@ -70,7 +70,7 @@ erDiagram
 | `profiles` | Dados exibíveis do usuário (1:1 com `auth.users`, criado por gatilho). | 0 | ✅ |
 | `memberships` | Vínculo usuário ↔ organização com papel. | 0 | ✅ |
 | `audit_log` | Trilha append-only de eventos de segurança e ações de agentes. | 0 | ✅ |
-| `invitations` | Convites com hash de token, expiração, papel proposto. | 1 | planejada |
+| `invitations` | Convites: hash SHA-256 do token (nunca o token), e-mail, papel proposto, expiração de 7 dias, uso único. | 1 | ✅ migração `20261101120000` |
 | `agents` | Identidade, especialidade, objetivo, responsabilidades, instruções, autonomia, limites, modelo. | 2 | planejada |
 | `agent_tools` | Ferramentas autorizadas por agente (nome, configuração). A classe de risco vem do código, não do banco. | 2 | planejada |
 | `tasks` | Trabalho atribuído a um agente (origem: pessoa, agenda, workflow, delegação). | 2 | planejada |
@@ -102,7 +102,29 @@ organização da tarefa.
   mínimo 6 meses (Marco Civil da Internet, art. 15) em armazenamento próprio.
 - **Passos de execução:** retenção configurável por organização (padrão a definir com clientes).
 
-## 6. Como testar
+## 6. Comandos do banco e códigos de erro
+
+Operações sensíveis são funções `security definer` chamadas via RPC, não escritas diretas em tabelas:
+
+| Função | Quem pode chamar | Efeito |
+|---|---|---|
+| `create_organization(name, slug)` | usuário autenticado | Cria a organização e torna o chamador owner. |
+| `create_invitation(org_id, email, role)` | owner (qualquer papel exceto owner) · admin (member/viewer) | Revoga convite aberto anterior para o mesmo e-mail; devolve o token **uma única vez**. |
+| `invitation_preview(token)` | qualquer pessoa com o token | Nome da organização, papel, e-mail e validade. |
+| `accept_invitation(token)` | usuário autenticado com o **mesmo e-mail, confirmado** | Cria o vínculo com o papel do convite; token passa a ser inválido. |
+| `revoke_invitation(id)` | quem poderia ter criado o convite | Invalida o convite. |
+
+Códigos de erro próprios (SQLSTATE), traduzidos para mensagens na interface:
+
+| Código | Significado |
+|---|---|
+| `MG001` | Convite inválido, expirado, revogado ou já usado (sem distinguir, para não dar pistas). |
+| `MG002` | Convite enviado para outro e-mail, ou e-mail do usuário ainda não confirmado. |
+| `MG003` | A pessoa já faz parte da organização. |
+| `42501` | Sem permissão para a operação (inclui papel não permitido no convite). |
+| `P0001` | Regra de negócio genérica (ex.: organização sem owner). |
+
+## 7. Como testar
 
 ```bash
 npm run test:db

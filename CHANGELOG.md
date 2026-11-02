@@ -3,6 +3,24 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-01 · Fase 1.2 — Convites no banco
+
+**Entregue**
+
+- `supabase/migrations/20261101120000_invitations.sql`: tabela `invitations` (somente hash SHA-256 do
+  token, expiração de 7 dias, uso único, um convite aberto por e-mail), funções `create_invitation`,
+  `accept_invitation`, `revoke_invitation`, `invitation_preview`, RLS (somente admins listam; coluna do
+  hash inacessível) e auditoria (`invitation.created/accepted/revoked`).
+- Aceite exige usuário autenticado com o **mesmo e-mail, confirmado**.
+- `canInvite()` em `@magnus/core` espelhando as regras.
+- Helpers de teste de banco extraídos para `supabase/tests/support/db.ts`.
+
+**Verificado**
+
+- `npm run check`: typecheck limpo, 62 testes passando (11 novos de convites + 1 de domínio).
+- 7 mutações na migração (ignorar e-mail, confirmação, expiração, regras de papel na criação e na
+  revogação, manter token antigo, expor o hash): todas detectadas pelos testes.
+
 ## 2026-11-01 · Fase 0 — Decisões do bloco A aprovadas
 
 **Entregue**

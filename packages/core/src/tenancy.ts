@@ -41,6 +41,15 @@ export function canChangeRole(actor: OrgRole | null | undefined, currentRole: Or
 }
 
 /**
+ * Whether `actor` may invite someone (or revoke an invitation) with `role`.
+ * Nobody is invited as owner; ownership is granted by promotion.
+ * Mirrors public.create_invitation() / public.revoke_invitation().
+ */
+export function canInvite(actor: OrgRole | null | undefined, role: OrgRole): boolean {
+  return role !== 'owner' && canManageRole(actor, role);
+}
+
+/**
  * Whether removing or demoting one owner would leave the organization ownerless.
  * Mirrors public.ensure_org_keeps_an_owner().
  */

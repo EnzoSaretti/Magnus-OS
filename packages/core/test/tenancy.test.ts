@@ -1,6 +1,14 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ORG_ROLES, canChangeRole, canManageRole, hasRole, isOrgRole, wouldLeaveNoOwner } from '../src/tenancy.ts';
+import {
+  ORG_ROLES,
+  canChangeRole,
+  canInvite,
+  canManageRole,
+  hasRole,
+  isOrgRole,
+  wouldLeaveNoOwner,
+} from '../src/tenancy.ts';
 import { ForbiddenError, PERMISSIONS, assertCan, can } from '../src/permissions.ts';
 
 describe('roles', () => {
@@ -45,6 +53,16 @@ describe('membership management (mirrors the memberships RLS policies)', () => {
     assert.ok(canChangeRole('admin', 'member', 'viewer'));
     assert.ok(!canChangeRole('admin', 'member', 'admin'));
     assert.ok(!canChangeRole('admin', 'admin', 'owner'));
+  });
+
+  test('invitations follow the same rules, and nobody is invited as owner', () => {
+    assert.ok(canInvite('admin', 'member'));
+    assert.ok(canInvite('admin', 'viewer'));
+    assert.ok(!canInvite('admin', 'admin'));
+    assert.ok(canInvite('owner', 'admin'));
+    assert.ok(!canInvite('owner', 'owner'));
+    assert.ok(!canInvite('member', 'viewer'));
+    assert.ok(!canInvite(null, 'viewer'));
   });
 
   test('the last owner cannot step down or leave', () => {

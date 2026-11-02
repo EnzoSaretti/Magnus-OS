@@ -1,16 +1,10 @@
 /**
- * Tenancy and row-level security for the core tables.
- *
- * Boots an in-memory Postgres (PGlite), loads a minimal Supabase shim plus every
- * migration in order, then acts as real callers would through the API roles
- * (anon, authenticated with a JWT subject, service_role).
+ * Tenancy and row-level security for the core tables, exercised through the
+ * API roles (anon, authenticated with a JWT subject, service_role).
  */
 import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdir, readFile } from 'node:fs/promises';
-import { PGlite, type Transaction } from '@electric-sql/pglite';
-
-const SUPABASE_DIR = new URL('../', import.meta.url);
+import { createTestDb, type Actor as DbActor, type TestDb } from './support/db.ts';
 
 const USERS = {
   alice: '00000000-0000-4000-8000-00000000000a',
@@ -20,46 +14,12 @@ const USERS = {
 } as const;
 
 type UserName = keyof typeof USERS;
-type Actor = UserName | 'anon' | 'service';
+type Actor = DbActor<UserName>;
 
-let db: PGlite;
+let db: TestDb<UserName>;
 
-async function bootDatabase(): Promise<PGlite> {
-  const instance = await PGlite.create();
-  await instance.exec(await readFile(new URL('tests/support/supabase-shim.sql', SUPABASE_DIR), 'utf8'));
-
-  const migrationsDir = new URL('migrations/', SUPABASE_DIR);
-  const migrations = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
-  for (const file of migrations) {
-    await instance.exec(await readFile(new URL(file, migrationsDir), 'utf8'));
-  }
-  return instance;
-}
-
-/** Runs fn in a transaction as the given caller, the way PostgREST sets up a request. */
-async function as<T>(actor: Actor, fn: (tx: Transaction) => Promise<T>): Promise<T> {
-  return db.transaction(async (tx) => {
-    if (actor === 'anon') {
-      await tx.exec('set local role anon');
-    } else if (actor === 'service') {
-      await tx.exec('set local role service_role');
-    } else {
-      await tx.exec('set local role authenticated');
-      await tx.query("select set_config('request.jwt.claims', $1, true)", [
-        JSON.stringify({ sub: USERS[actor], role: 'authenticated' }),
-      ]);
-    }
-    return fn(tx);
-  });
-}
-
-async function rows<T>(actor: Actor, sql: string, params: unknown[] = []): Promise<T[]> {
-  return as(actor, async (tx) => (await tx.query<T>(sql, params)).rows);
-}
-
-async function affected(actor: Actor, sql: string, params: unknown[] = []): Promise<number> {
-  return as(actor, async (tx) => (await tx.query(sql, params)).affectedRows ?? 0);
-}
+const rows = <T>(actor: Actor, sql: string, params?: unknown[]) => db.rows<T>(actor, sql, params);
+const affected = (actor: Actor, sql: string, params?: unknown[]) => db.affected(actor, sql, params);
 
 async function createOrg(actor: Actor, name: string, slug: string): Promise<string> {
   const [org] = await rows<{ id: string }>(actor, 'select id from public.create_organization($1, $2)', [name, slug]);
@@ -85,14 +45,7 @@ describe('core tenancy and row-level security', () => {
   let globex: string;
 
   before(async () => {
-    db = await bootDatabase();
-    for (const [name, id] of Object.entries(USERS)) {
-      await db.query('insert into auth.users (id, email, raw_user_meta_data) values ($1, $2, $3::jsonb)', [
-        id,
-        `${name}@example.test`,
-        JSON.stringify({ full_name: name }),
-      ]);
-    }
+    db = await createTestDb(USERS);
   });
 
   after(async () => {
