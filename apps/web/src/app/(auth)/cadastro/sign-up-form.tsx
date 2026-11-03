@@ -40,7 +40,7 @@ export function SignUpForm() {
         type="password"
         autoComplete="new-password"
         required
-        minLength={10}
+        minLength={8}
         maxLength={72}
         hint={t.passwordHelp}
         error={state.fieldErrors?.password}

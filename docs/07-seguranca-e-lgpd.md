@@ -34,7 +34,7 @@ Implementado na F1.4a ✅:
   redirect*, com testes).
 - Login sem senha não cria contas e responde igual exista ou não a conta (não revela e-mails
   cadastrados); erros de login são genéricos ("e-mail ou senha incorretos").
-- Senha entre 10 e 72 caracteres, validada no servidor; a chave secreta do Supabase não existe no app.
+- Senha entre 8 e 72 caracteres (mínimo recomendado pelo NIST SP 800-63B), validada no servidor; a chave secreta do Supabase não existe no app.
 
 ## 3. Autorização (três camadas)
 

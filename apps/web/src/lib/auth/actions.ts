@@ -33,7 +33,7 @@ const magicLinkSchema = z.object({ email, next: z.string().optional() });
 const signUpSchema = z.object({
   fullName: z.string().trim().min(2, v.fullName).max(120, v.fullName),
   email,
-  password: z.string().min(10, v.passwordLength).max(72, v.passwordLength),
+  password: z.string().min(8, v.passwordLength).max(72, v.passwordLength),
 });
 
 function fieldErrorsOf(error: z.ZodError): Partial<Record<Field, string>> {

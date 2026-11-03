@@ -49,7 +49,7 @@ export const ptBR = {
       fullName: 'Nome completo',
       email: 'E-mail',
       password: 'Senha',
-      passwordHelp: 'Entre 10 e 72 caracteres.',
+      passwordHelp: 'Entre 8 e 72 caracteres.',
       submit: 'Criar conta',
       submitting: 'Criando conta…',
       haveAccount: 'Já tem conta?',
@@ -64,7 +64,7 @@ export const ptBR = {
     validation: {
       email: 'Informe um e-mail válido.',
       passwordRequired: 'Informe sua senha.',
-      passwordLength: 'A senha precisa ter entre 10 e 72 caracteres.',
+      passwordLength: 'A senha precisa ter entre 8 e 72 caracteres.',
       fullName: 'Informe seu nome.',
     },
     errors: {

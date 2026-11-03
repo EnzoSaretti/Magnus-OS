@@ -3,6 +3,13 @@
 Formato: data · fase · o que foi entregue · como foi verificado. Decisões arquiteturais ficam em
 [`docs/adr/`](docs/adr/README.md).
 
+## 2026-11-02 · Ajuste — senha mínima de 8 caracteres
+
+- A pedido do fundador, o cadastro passa a aceitar senhas de 8 a 72 caracteres (antes, 10 a 72):
+  validação no servidor (`lib/auth/actions.ts`), atributo do campo, textos de ajuda e erro, e
+  `docs/07-seguranca-e-lgpd.md`. 8 é o mínimo recomendado pelo NIST SP 800-63B.
+- O login com senha não muda (não valida tamanho); contas existentes continuam funcionando.
+
 ## 2026-11-02 · Fase 1.3b — Redesenho do console e logotipo
 
 **Entregue**
